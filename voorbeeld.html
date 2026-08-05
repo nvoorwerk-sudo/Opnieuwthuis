@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Op weg naar een huisje in het bos.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  .bh-wrap{ --sand:#F2ECDE; --sand-deep:#E8E0CC; --ink:#2E2B22; --ink-soft:#5C5842; --sage:#7C8564; --sage-deep:#5E6849; --clay:#BE8C5E; --clay-deep:#9C6F44; --line:rgba(46,43,34,0.14);
+    font-family:'Ubuntu', -apple-system, sans-serif; color:var(--ink); background:var(--sand); line-height:1.6; max-width:760px; margin:0 auto; position:relative; isolation:isolate; }
+  .bh-wrap *{ box-sizing:border-box; }
+  .bh-wrap::before{ content:''; position:absolute; inset:0; z-index:-1;
+    background: radial-gradient(circle at 6% 8%, rgba(124,133,100,0.20), transparent 34%), radial-gradient(circle at 96% 4%, rgba(190,140,94,0.18), transparent 38%), radial-gradient(circle at 10% 92%, rgba(190,140,94,0.14), transparent 36%), radial-gradient(circle at 94% 88%, rgba(124,133,100,0.16), transparent 36%), radial-gradient(circle at 50% 45%, rgba(124,133,100,0.06), transparent 55%), url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMTYwIDE2MCI+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNUM2ODQ5IiBzdHJva2Utd2lkdGg9IjEuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjE2Ij4KICAgIDxwYXRoIGQ9Ik0yMCAxMzAgQyAyNCAxMDAsIDMwIDcwLCAyMiA0MCIgLz4KICAgIDxwYXRoIGQ9Ik0yMiAxMDAgQyAzMCA5NiwgMzggOTIsIDQ0IDg0IiAvPgogICAgPHBhdGggZD0iTTIyIDgwIEMgMTQgNzYsIDYgNzIsIDAgNjYiIC8+CiAgICA8cGF0aCBkPSJNMjIgNjAgQyAzMCA1NiwgMzYgNTIsIDQwIDQ0IiAvPgogICAgPHBhdGggZD0iTTEyMCAyMCBDIDExNiA0NiwgMTA4IDcyLCAxMTggMTAwIiAvPgogICAgPHBhdGggZD0iTTExOCA1MCBDIDExMCA0NiwgMTAyIDQyLCA5NiAzNCIgLz4KICAgIDxwYXRoIGQ9Ik0xMTggNzAgQyAxMjYgNjYsIDEzNCA2MiwgMTQwIDU2IiAvPgogICAgPHBhdGggZD0iTTExOCA5MCBDIDExMCA4OCwgMTAyIDg2LCA5NiA4MCIgLz4KICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iMTIwIiByPSIzIiAvPgogICAgPHBhdGggZD0iTTcwIDEyMyBDIDcwIDExMCwgNjYgMTAwLCA1OCA5MiIgLz4KICAgIDxwYXRoIGQ9Ik03MCAxMTIgQyA3NiAxMDgsIDgyIDEwNCwgODYgOTYiIC8+CiAgICA8cGF0aCBkPSJNNzAgMTAwIEMgNjQgOTYsIDU4IDkyLCA1NCA4NCIgLz4KICA8L2c+Cjwvc3ZnPgo=");
+    background-repeat:repeat; background-size:100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,160px 160px; }
+  .bh-serif{ font-family:'Ubuntu', sans-serif; }
+  .bh-header{ padding:64px 28px 40px; }
+  .bh-eyebrow{ font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage-deep); margin-bottom:18px; display:block; }
+  .bh-header h1{ font-family:'Ubuntu', sans-serif; font-weight:700; font-size:clamp(28px,4.6vw,42px); line-height:1.22; margin:0 0 26px; max-width:16ch; }
+  .bh-header h1 em{ font-style:italic; color:var(--clay-deep); }
+  .bh-header p{ font-size:16.5px; color:var(--ink-soft); max-width:56ch; margin:0 0 14px; }
+  .bh-divider{ height:1px; background:var(--line); margin:0 28px; }
+  .bh-note{ margin:36px 28px 8px; font-size:14px; color:var(--ink-soft); padding:16px 20px; background:var(--sand-deep); border-radius:2px; max-width:640px; }
+  .bh-note b{ color:var(--ink); }
+  .bh-category{ padding:0 28px; margin-top:44px; }
+  .bh-cat-head{ border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:6px; }
+  .bh-cat-head h2{ font-family:'Ubuntu', sans-serif; font-weight:500; font-style:italic; font-size:21px; margin:0; }
+  .bh-item{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding:15px 0; border-bottom:1px dashed var(--line); }
+  .bh-item:last-child{ border-bottom:none; }
+  .bh-item-text b{ display:block; font-size:15px; font-weight:600; }
+  .bh-item-text span{ font-size:13px; color:var(--ink-soft); }
+  .bh-offer-btn{ font-size:12.5px; padding:8px 14px; border-radius:20px; white-space:nowrap; font-weight:500; border:1px solid rgba(124,133,100,0.4); background:rgba(124,133,100,0.08); color:var(--sage-deep); cursor:pointer; font-family:'Ubuntu',sans-serif; }
+  .bh-offer-btn:hover{ background:rgba(124,133,100,0.16); }
+  .bh-suggest{ margin:56px 28px 0; padding:32px 30px; background:var(--ink); color:var(--sand); border-radius:2px; }
+  .bh-suggest h2{ font-family:'Ubuntu', sans-serif; font-weight:700; font-style:italic; font-size:22px; margin:0 0 8px; }
+  .bh-suggest p{ font-size:14px; color:#C9C4AC; margin:0 0 20px; max-width:48ch; }
+  .bh-wrap input, .bh-wrap textarea{ font-family:'Ubuntu', sans-serif; background:#3B372A; border:1px solid rgba(242,236,222,0.2); color:var(--sand); border-radius:3px; padding:11px 13px; font-size:14px; width:100%; margin-bottom:10px; }
+  .bh-btn-primary{ background:var(--clay); color:#241A0D; border:none; padding:11px 22px; border-radius:3px; font-weight:700; font-size:14px; cursor:pointer; font-family:'Ubuntu', sans-serif; }
+  .bh-btn-primary:hover{ background:#CC9A6B; }
+  .bh-footer{ padding:40px 28px 64px; font-size:12.5px; color:var(--ink-soft); }
+  .bh-footer p{ max-width:52ch; margin:0; }
+  .bh-modal-backdrop{ position:fixed; inset:0; background:rgba(46,43,34,0.5); display:none; align-items:center; justify-content:center; padding:20px; z-index:9999; }
+  .bh-modal-backdrop.open{ display:flex; }
+  .bh-modal{ background:var(--sand); border-radius:3px; padding:28px; max-width:380px; width:100%; }
+  .bh-modal h3{ font-family:'Ubuntu', sans-serif; font-weight:700; font-style:italic; font-size:20px; margin:0 0 4px; color:var(--ink); }
+  .bh-modal p.bh-sub{ font-size:13px; color:var(--ink-soft); margin:0 0 18px; }
+  .bh-modal input{ background:#fff; color:var(--ink); border:1px solid var(--line); }
+  .bh-modal-actions{ display:flex; gap:10px; margin-top:14px; }
+  .bh-btn-ghost{ background:none; border:1px solid var(--line); color:var(--ink); padding:10px 16px; border-radius:3px; font-size:14px; cursor:pointer; flex:1; font-family:'Ubuntu', sans-serif; }
+  .bh-modal .bh-btn-primary{ flex:1; }
+</style>
+<div class="bh-wrap">
+<div class="bh-header">
+  <span class="bh-eyebrow">Een oproep</span>
+  <h1 class="bh-serif">Op weg naar een <em>huisje</em> in het bos.</h1>
+  <p>Er komt een nieuw hoofdstuk aan. Ik verhuis naar een klein huisje tussen de bomen, mijn ex blijft in ons huis en het meeste dat we samen hadden blijft daar ook — ik hecht er weinig aan.</p>
+  <p>Maar een leeg huisje vraagt om wat basisspullen. Liever dan alles nieuw te kopen, hoor ik graag eerst: heb jij iets staan waar je vanaf wil?</p>
+</div>
+<div class="bh-divider"></div>
+<div class="bh-note"><b>Zo werkt het:</b> zie je iets dat je kunt missen? Klik op &ldquo;ik bied dit aan&rdquo; &mdash; er opent een kant-en-klaar bericht naar mij, dat jij zelf verstuurt. Is iets al geregeld, dan haal ik het van de lijst af.</div>
+<div id="bh-categories"></div>
+<div class="bh-suggest">
+  <h2 class="bh-serif">Staat er iets niet bij?</h2>
+  <p>Heb je iets anders dat je denkt dat ik kan gebruiken in een klein huisje? Laat het gewoon weten.</p>
+  <input id="bh-sugg-name" placeholder="Je naam">
+  <input id="bh-sugg-what" placeholder="Wat heb je voor me?">
+  <textarea id="bh-sugg-note" placeholder="Eventuele toelichting" style="min-height:56px;"></textarea>
+  <button class="bh-btn-primary" id="bh-sugg-submit">Verstuur</button>
+</div>
+<div class="bh-footer"><p>Dank je wel dat je meedenkt — elk aanbod scheelt mij een nieuwe aankoop, en jou een spullen-berg minder.</p></div>
+<div class="bh-modal-backdrop" id="bh-modal-backdrop">
+  <div class="bh-modal">
+    <h3 class="bh-serif" id="bh-modal-title">Wat fijn!</h3>
+    <p class="bh-sub">Laat weten wie je bent — er opent daarna een bericht dat jij zelf verstuurt.</p>
+    <input id="bh-claim-name" placeholder="Je naam">
+    <div id="bh-claim-qty-wrap" style="display:none;">
+      <label style="display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;">Hoeveel bied je aan?</label>
+      <input id="bh-claim-qty" type="number" min="1" step="1" value="1" style="max-width:100px;">
+    </div>
+    <input id="bh-claim-note" placeholder="Eventuele toelichting (optioneel)">
+    <div class="bh-modal-actions">
+      <button class="bh-btn-ghost" id="bh-modal-cancel" type="button">Annuleren</button>
+      <button class="bh-btn-primary" id="bh-modal-confirm" type="button">Bericht openen</button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+var itemsData = [
+  {
+    "category": "Keuken",
+    "items": [
+      {
+        "name": "Kleine pannenset",
+        "note": "voor 1-2 personen",
+        "needed": 1
+      },
+      {
+        "name": "Waterkoker",
+        "note": "",
+        "needed": 1
+      },
+      {
+        "name": "Bestek",
+        "note": "voor 2 personen",
+        "needed": 2
+      },
+      {
+        "name": "Koffiezetapparaat",
+        "note": "simpel mag",
+        "needed": 1
+      },
+      {
+        "name": "Drinkglazen",
+        "note": "",
+        "needed": 4
+      }
+    ]
+  },
+  {
+    "category": "Woonkamer",
+    "items": [
+      {
+        "name": "Leeslamp",
+        "note": "staand of tafel",
+        "needed": 1
+      },
+      {
+        "name": "Kleine boekenkast",
+        "note": "",
+        "needed": 1
+      },
+      {
+        "name": "Vloerkleed",
+        "note": "ca. 2x1,5m",
+        "needed": 1
+      }
+    ]
+  },
+  {
+    "category": "Slaapkamer",
+    "items": [
+      {
+        "name": "Eenpersoonsmatras of bed",
+        "note": "",
+        "needed": 1
+      },
+      {
+        "name": "Dekbed + overtrek",
+        "note": "",
+        "needed": 1
+      },
+      {
+        "name": "Nachtkastje",
+        "note": "",
+        "needed": 1
+      }
+    ]
+  },
+  {
+    "category": "Buiten & tuin",
+    "items": [
+      {
+        "name": "Haardhout",
+        "note": "voor de kachel",
+        "needed": 1
+      },
+      {
+        "name": "Buitenstoel",
+        "note": "",
+        "needed": 2
+      },
+      {
+        "name": "Regenlaarzen",
+        "note": "maat 42-43",
+        "needed": 1
+      }
+    ]
+  },
+  {
+    "category": "Overig",
+    "items": [
+      {
+        "name": "Fiets",
+        "note": "iets simpels",
+        "needed": 1
+      },
+      {
+        "name": "Basis gereedschapskist",
+        "note": "",
+        "needed": 1
+      }
+    ]
+  }
+];
+var contact = { method:'email', value:"jij@voorbeeld.nl" };
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; }
+function escapeHtml(str){ var d=document.createElement("div"); d.textContent=str; return d.innerHTML; }
+function renderCategories(){
+  var wrap=document.getElementById("bh-categories"); wrap.innerHTML="";
+  itemsData.forEach(function(cat){
+    var catEl=el("div","bh-category");
+    var head=el("div","bh-cat-head"); head.appendChild(el("h2",null,escapeHtml(cat.category))); catEl.appendChild(head);
+    cat.items.forEach(function(item){
+      var needed = item.needed && item.needed>1 ? item.needed : 1;
+      var row=el("div","bh-item");
+      var textWrap=el("div","bh-item-text");
+      var label = needed>1 ? (item.name+" ("+needed+"x)") : item.name;
+      textWrap.appendChild(el("b",null,escapeHtml(label)));
+      if(item.note) textWrap.appendChild(el("span",null,escapeHtml(item.note)));
+      row.appendChild(textWrap);
+      var btn=el("button","bh-offer-btn","Ik bied dit aan →");
+      btn.type="button";
+      btn.addEventListener("click", function(){ openModal(item.name, needed); });
+      row.appendChild(btn);
+      catEl.appendChild(row);
+    });
+    wrap.appendChild(catEl);
+  });
+}
+var activeItemName=null, activeNeeded=1;
+function openModal(name, needed){
+  activeItemName=name; activeNeeded=needed;
+  document.getElementById("bh-modal-title").textContent = name + " — top!";
+  document.getElementById("bh-claim-name").value="";
+  document.getElementById("bh-claim-note").value="";
+  var qtyWrap=document.getElementById("bh-claim-qty-wrap"); var qtyInput=document.getElementById("bh-claim-qty");
+  if(needed>1){ qtyWrap.style.display="block"; qtyInput.max=needed; qtyInput.value=1; } else { qtyWrap.style.display="none"; qtyInput.value=1; }
+  document.getElementById("bh-modal-backdrop").classList.add("open");
+}
+function closeModal(){ document.getElementById("bh-modal-backdrop").classList.remove("open"); }
+document.getElementById("bh-modal-cancel").addEventListener("click", closeModal);
+document.getElementById("bh-modal-backdrop").addEventListener("click", function(e){ if(e.target.id==="bh-modal-backdrop") closeModal(); });
+function openContact(message){
+  if(contact.method==="whatsapp" && contact.value){
+    window.open("https://wa.me/"+contact.value+"?text="+encodeURIComponent(message), "_blank");
+  } else if(contact.value){
+    window.location.href = "mailto:"+contact.value+"?subject="+encodeURIComponent("Aanbod: "+message.split("\n")[0])+"&body="+encodeURIComponent(message);
+  } else {
+    alert("Er is nog geen contactgegeven ingesteld op deze pagina.");
+  }
+}
+document.getElementById("bh-modal-confirm").addEventListener("click", function(){
+  var name=document.getElementById("bh-claim-name").value.trim();
+  var note=document.getElementById("bh-claim-note").value.trim();
+  var qty=parseInt(document.getElementById("bh-claim-qty").value,10)||1;
+  if(qty>activeNeeded) qty=activeNeeded; if(qty<1) qty=1;
+  if(!name){ alert("Vul in elk geval je naam in."); return; }
+  var msg = "Hoi! Ik bied " + (activeNeeded>1 ? qty+"x " : "") + activeItemName + " aan.\nGroet, " + name + (note ? ("\n\n"+note) : "");
+  openContact(msg);
+  closeModal();
+});
+document.getElementById("bh-sugg-submit").addEventListener("click", function(){
+  var name=document.getElementById("bh-sugg-name").value.trim();
+  var what=document.getElementById("bh-sugg-what").value.trim();
+  var note=document.getElementById("bh-sugg-note").value.trim();
+  if(!name || !what){ alert("Vul je naam en wat je aanbiedt in."); return; }
+  var msg = "Hoi! Ik heb iets voor je: " + what + "\nGroet, " + name + (note ? ("\n\n"+note) : "");
+  openContact(msg);
+});
+renderCategories();
+})();
+</script>
+</html>

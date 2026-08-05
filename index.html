@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opnieuw Thuis — maak je eigen oproeppagina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#F2ECDE; --sand-deep:#E8E0CC; --ink:#2E2B22; --ink-soft:#5C5842;
+    --sage:#7C8564; --sage-deep:#5E6849; --clay:#BE8C5E; --clay-deep:#9C6F44;
+    --line:rgba(46,43,34,0.16); --panel:#FBF9F3;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Ubuntu', sans-serif; background:var(--sand); color:var(--ink); }
+  .top{ padding:26px 28px; border-bottom:1px solid var(--line); background:var(--panel); }
+  .top h1{ font-size:20px; margin:0 0 4px; font-weight:700; }
+  .top p{ margin:0; font-size:13.5px; color:var(--ink-soft); max-width:70ch; }
+
+  .layout{ display:flex; gap:0; align-items:flex-start; min-height:calc(100vh - 90px); }
+  .form-col{ width:44%; min-width:360px; padding:28px; overflow-y:auto; max-height:calc(100vh - 90px); }
+  .preview-col{ flex:1; position:sticky; top:0; height:calc(100vh - 90px); background:#ddd6c4; padding:20px; }
+  .preview-col iframe{ width:100%; height:100%; border:1px solid var(--line); background:#fff; }
+
+  fieldset{ border:1px solid var(--line); border-radius:6px; padding:16px 16px 18px; margin:0 0 20px; background:var(--panel); }
+  legend{ font-weight:700; font-size:13px; padding:0 6px; color:var(--ink); }
+  label{ display:block; font-size:12.5px; color:var(--ink-soft); margin:10px 0 4px; }
+  label:first-of-type{ margin-top:0; }
+  input[type=text], input[type=email], input[type=tel], input[type=number], textarea, select{
+    width:100%; font-family:'Ubuntu', sans-serif; font-size:14px; padding:9px 10px;
+    border:1px solid var(--line); border-radius:4px; background:#fff; color:var(--ink);
+  }
+  textarea{ resize:vertical; min-height:56px; }
+  .hint{ font-size:11.5px; color:#8A8770; margin-top:4px; }
+  .row2{ display:flex; gap:10px; }
+  .row2 > *{ flex:1; }
+
+  .category-block{ border:1px dashed var(--line); border-radius:5px; padding:12px; margin-bottom:12px; background:#fff; }
+  .category-block-head{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+  .category-block-head input{ flex:1; font-weight:600; }
+  .item-row{ display:flex; gap:6px; align-items:center; margin-bottom:6px; }
+  .item-row input[type=text]{ flex:2; }
+  .item-row input[type=text].note-input{ flex:2; }
+  .item-row input[type=number]{ flex:0 0 64px; }
+  .icon-btn{
+    border:1px solid var(--line); background:#fff; color:var(--ink-soft); border-radius:4px;
+    width:30px; height:30px; flex:0 0 30px; cursor:pointer; font-size:15px; line-height:1;
+  }
+  .icon-btn:hover{ background:var(--sand-deep); }
+  .text-btn{
+    background:none; border:1px solid var(--sage-deep); color:var(--sage-deep); border-radius:4px;
+    padding:7px 12px; font-size:12.5px; cursor:pointer; font-family:'Ubuntu', sans-serif;
+  }
+  .text-btn:hover{ background:rgba(94,104,73,0.08); }
+  .remove-cat{ border:none; background:none; color:#9C6F44; cursor:pointer; font-size:13px; }
+
+  .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .btn-primary{
+    background:var(--clay); border:none; color:#241A0D; font-weight:700; padding:12px 20px;
+    border-radius:4px; font-size:14px; cursor:pointer; font-family:'Ubuntu', sans-serif;
+  }
+  .btn-primary:hover{ background:#CC9A6B; }
+  .btn-secondary{
+    background:var(--ink); color:var(--sand); border:none; padding:12px 20px; border-radius:4px;
+    font-size:14px; cursor:pointer; font-family:'Ubuntu', sans-serif;
+  }
+  .warn{ font-size:12.5px; color:#9C4A2A; margin-top:8px; }
+  .code-fallback{ margin-top:14px; }
+  .code-fallback summary{ cursor:pointer; font-size:12.5px; color:var(--ink-soft); }
+  .code-fallback textarea{ margin-top:8px; height:160px; font-family:monospace; font-size:11.5px; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>Opnieuw Thuis — maak je eigen oproeppagina</h1>
+  <p>Voor iedereen die opnieuw begint: na een scheiding, de eerste eigen woning, na een brand, of iets anders. Vul het formulier links in, bekijk rechts direct hoe je pagina eruitziet, en download of kopieer 'm onderaan — geen code nodig.</p>
+</div>
+
+<div class="layout">
+  <div class="form-col">
+
+    <fieldset>
+      <legend>Uiterlijk</legend>
+      <label for="f-theme">Kleurthema</label>
+      <select id="f-theme">
+        <option value="bos">Bos &amp; rust</option>
+        <option value="fris">Fris begin</option>
+        <option value="warmte">Nieuwe warmte</option>
+      </select>
+      <p class="hint">Kies wat past bij jouw verhaal — het thema bepaalt alleen de kleuren, niet de tekst.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Jouw verhaal</legend>
+      <label for="f-eyebrow">Klein label boven de titel</label>
+      <input type="text" id="f-eyebrow" value="Een oproep">
+
+      <label for="f-heading">Titel</label>
+      <input type="text" id="f-heading" value="Op weg naar een nieuw thuis.">
+
+      <label for="f-emphasis">Woord cursief maken (optioneel)</label>
+      <input type="text" id="f-emphasis" value="nieuw">
+      <p class="hint">Moet exact voorkomen in de titel hierboven.</p>
+
+      <label for="f-para1">Eerste alinea</label>
+      <textarea id="f-para1">Er komt een nieuw hoofdstuk aan en ik begin opnieuw, met minder spullen dan voorheen.</textarea>
+
+      <label for="f-para2">Tweede alinea</label>
+      <textarea id="f-para2">In plaats van alles nieuw te kopen, hoor ik graag eerst: heb jij iets staan waar je vanaf wil?</textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Hoe mensen contact opnemen</legend>
+      <label for="f-contact-method">Contactmethode</label>
+      <select id="f-contact-method">
+        <option value="email">E-mail</option>
+        <option value="whatsapp">WhatsApp</option>
+      </select>
+      <div id="f-contact-email-wrap">
+        <label for="f-contact-email">Je e-mailadres</label>
+        <input type="email" id="f-contact-email" placeholder="jij@voorbeeld.nl">
+      </div>
+      <div id="f-contact-wa-wrap" style="display:none;">
+        <label for="f-contact-wa">WhatsApp-nummer (met landcode, alleen cijfers)</label>
+        <input type="tel" id="f-contact-wa" placeholder="31612345678">
+      </div>
+      <p class="hint">Als iemand op "ik bied dit aan" klikt, opent er een kant-en-klaar bericht naar jou — er wordt niets automatisch opgeslagen of bijgehouden.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Spullen die je zoekt</legend>
+      <div id="f-categories"></div>
+      <button class="text-btn" id="f-add-category" type="button">+ Categorie toevoegen</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Onderaan de pagina</legend>
+      <label for="f-suggest-desc">Tekst bij "staat er iets niet bij?"</label>
+      <textarea id="f-suggest-desc">Heb je iets anders dat je denkt dat ik kan gebruiken? Laat het gewoon weten.</textarea>
+      <label for="f-footer">Slottekst</label>
+      <textarea id="f-footer">Dank je wel dat je meedenkt — elk aanbod scheelt mij een nieuwe aankoop.</textarea>
+    </fieldset>
+
+    <div id="f-warn" class="warn" style="display:none;"></div>
+    <div class="actions">
+      <button class="btn-primary" id="f-download" type="button">Download jouw pagina (HTML)</button>
+      <button class="btn-secondary" id="f-copy" type="button">Kopieer HTML</button>
+    </div>
+
+    <details class="code-fallback">
+      <summary>Lukt kopiëren niet? Selecteer de code hier handmatig</summary>
+      <textarea id="f-code-output" readonly></textarea>
+    </details>
+  </div>
+
+  <div class="preview-col">
+    <iframe id="f-preview" title="Voorbeeld"></iframe>
+  </div>
+</div>
+
+<script>
+const THEMES = {
+  bos:    { sand:'#F2ECDE', sandDeep:'#E8E0CC', ink:'#2E2B22', inkSoft:'#5C5842', a1:'#7C8564', a1d:'#5E6849', a2:'#BE8C5E', a2d:'#9C6F44' },
+  fris:   { sand:'#EDF2EA', sandDeep:'#DCE7DE', ink:'#20302A', inkSoft:'#4C5C53', a1:'#5E8B7E', a1d:'#3F6A5E', a2:'#6E93A8', a2d:'#4F7488' },
+  warmte: { sand:'#F5EDE3', sandDeep:'#EEDFCB', ink:'#332420', inkSoft:'#6B4F3F', a1:'#C98A3F', a1d:'#A66C2A', a2:'#B15C42', a2d:'#8E4530' },
+};
+const LEAF_SVG_BASE64 = "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMTYwIDE2MCI+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNUM2ODQ5IiBzdHJva2Utd2lkdGg9IjEuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjE2Ij4KICAgIDxwYXRoIGQ9Ik0yMCAxMzAgQyAyNCAxMDAsIDMwIDcwLCAyMiA0MCIgLz4KICAgIDxwYXRoIGQ9Ik0yMiAxMDAgQyAzMCA5NiwgMzggOTIsIDQ0IDg0IiAvPgogICAgPHBhdGggZD0iTTIyIDgwIEMgMTQgNzYsIDYgNzIsIDAgNjYiIC8+CiAgICA8cGF0aCBkPSJNMjIgNjAgQyAzMCA1NiwgMzYgNTIsIDQwIDQ0IiAvPgogICAgPHBhdGggZD0iTTEyMCAyMCBDIDExNiA0NiwgMTA4IDcyLCAxMTggMTAwIiAvPgogICAgPHBhdGggZD0iTTExOCA1MCBDIDExMCA0NiwgMTAyIDQyLCA5NiAzNCIgLz4KICAgIDxwYXRoIGQ9Ik0xMTggNzAgQyAxMjYgNjYsIDEzNCA2MiwgMTQwIDU2IiAvPgogICAgPHBhdGggZD0iTTExOCA5MCBDIDExMCA4OCwgMTAyIDg2LCA5NiA4MCIgLz4KICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iMTIwIiByPSIzIiAvPgogICAgPHBhdGggZD0iTTcwIDEyMyBDIDcwIDExMCwgNjYgMTAwLCA1OCA5MiIgLz4KICAgIDxwYXRoIGQ9Ik03MCAxMTIgQyA3NiAxMDgsIDgyIDEwNCwgODYgOTYiIC8+CiAgICA8cGF0aCBkPSJNNzAgMTAwIEMgNjQgOTYsIDU4IDkyLCA1NCA4NCIgLz4KICA8L2c+Cjwvc3ZnPgo=";
+
+function hexToRgb(hex){
+  const h = hex.replace('#','');
+  const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+  return r+','+g+','+b;
+}
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function applyEmphasis(headingRaw, wordRaw){
+  const esc = escapeHtml(headingRaw);
+  const w = (wordRaw||'').trim();
+  if(!w) return esc;
+  const escWord = escapeHtml(w);
+  const idx = esc.toLowerCase().indexOf(escWord.toLowerCase());
+  if(idx === -1) return esc;
+  return esc.slice(0,idx) + '<em>' + esc.slice(idx, idx+escWord.length) + '</em>' + esc.slice(idx+escWord.length);
+}
+
+let state = {
+  categories: [
+    { name: "Keuken", items: [
+      { name: "Kleine pannenset", note: "voor 1-2 personen", needed: 1 },
+      { name: "Waterkoker", note: "", needed: 1 },
+      { name: "Bestek", note: "voor 2 personen", needed: 2 },
+    ]},
+    { name: "Woonkamer", items: [
+      { name: "Leeslamp", note: "staand of tafel", needed: 1 },
+      { name: "Vloerkleed", note: "ca. 2x1,5m", needed: 1 },
+    ]},
+    { name: "Slaapkamer", items: [
+      { name: "Eenpersoonsmatras of bed", note: "", needed: 1 },
+      { name: "Dekbed + overtrek", note: "", needed: 1 },
+    ]},
+  ]
+};
+
+function renderCategoriesForm(){
+  const wrap = document.getElementById('f-categories');
+  wrap.innerHTML = '';
+  state.categories.forEach((cat, ci) => {
+    const block = document.createElement('div');
+    block.className = 'category-block';
+
+    const head = document.createElement('div');
+    head.className = 'category-block-head';
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text'; nameInput.value = cat.name; nameInput.placeholder = 'Naam categorie';
+    nameInput.addEventListener('input', () => { state.categories[ci].name = nameInput.value; updatePreview(); });
+    const removeCatBtn = document.createElement('button');
+    removeCatBtn.className = 'remove-cat'; removeCatBtn.type = 'button'; removeCatBtn.textContent = 'verwijder categorie';
+    removeCatBtn.addEventListener('click', () => { state.categories.splice(ci,1); renderCategoriesForm(); updatePreview(); });
+    head.appendChild(nameInput); head.appendChild(removeCatBtn);
+    block.appendChild(head);
+
+    cat.items.forEach((item, ii) => {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+
+      const nameI = document.createElement('input');
+      nameI.type = 'text'; nameI.value = item.name; nameI.placeholder = 'Naam item';
+      nameI.addEventListener('input', () => { state.categories[ci].items[ii].name = nameI.value; updatePreview(); });
+
+      const noteI = document.createElement('input');
+      noteI.type = 'text'; noteI.className = 'note-input'; noteI.value = item.note; noteI.placeholder = 'Toelichting (optioneel)';
+      noteI.addEventListener('input', () => { state.categories[ci].items[ii].note = noteI.value; updatePreview(); });
+
+      const neededI = document.createElement('input');
+      neededI.type = 'number'; neededI.min = '1'; neededI.value = item.needed || 1; neededI.title = 'Aantal nodig';
+      neededI.addEventListener('input', () => { state.categories[ci].items[ii].needed = Math.max(1, parseInt(neededI.value,10)||1); updatePreview(); });
+
+      const removeItemBtn = document.createElement('button');
+      removeItemBtn.className = 'icon-btn'; removeItemBtn.type = 'button'; removeItemBtn.textContent = '×';
+      removeItemBtn.addEventListener('click', () => { state.categories[ci].items.splice(ii,1); renderCategoriesForm(); updatePreview(); });
+
+      row.appendChild(nameI); row.appendChild(noteI); row.appendChild(neededI); row.appendChild(removeItemBtn);
+      block.appendChild(row);
+    });
+
+    const addItemBtn = document.createElement('button');
+    addItemBtn.className = 'text-btn'; addItemBtn.type = 'button'; addItemBtn.textContent = '+ Item toevoegen';
+    addItemBtn.addEventListener('click', () => {
+      state.categories[ci].items.push({ name: 'Nieuw item', note: '', needed: 1 });
+      renderCategoriesForm(); updatePreview();
+    });
+    block.appendChild(addItemBtn);
+
+    wrap.appendChild(block);
+  });
+}
+
+document.getElementById('f-add-category').addEventListener('click', () => {
+  state.categories.push({ name: 'Nieuwe categorie', items: [{ name: 'Nieuw item', note: '', needed: 1 }] });
+  renderCategoriesForm(); updatePreview();
+});
+
+function getFormValues(){
+  return {
+    theme: document.getElementById('f-theme').value,
+    eyebrow: document.getElementById('f-eyebrow').value,
+    heading: document.getElementById('f-heading').value,
+    emphasis: document.getElementById('f-emphasis').value,
+    para1: document.getElementById('f-para1').value,
+    para2: document.getElementById('f-para2').value,
+    contactMethod: document.getElementById('f-contact-method').value,
+    contactEmail: document.getElementById('f-contact-email').value,
+    contactWa: document.getElementById('f-contact-wa').value,
+    suggestDesc: document.getElementById('f-suggest-desc').value,
+    footer: document.getElementById('f-footer').value,
+  };
+}
+
+document.getElementById('f-contact-method').addEventListener('change', function(){
+  const isEmail = this.value === 'email';
+  document.getElementById('f-contact-email-wrap').style.display = isEmail ? 'block' : 'none';
+  document.getElementById('f-contact-wa-wrap').style.display = isEmail ? 'none' : 'block';
+  updatePreview();
+});
+
+['f-theme','f-eyebrow','f-heading','f-emphasis','f-para1','f-para2','f-contact-email','f-contact-wa','f-suggest-desc','f-footer']
+  .forEach(id => document.getElementById(id).addEventListener('input', updatePreview));
+
+function buildSiteHTML(cfg){
+  const t = THEMES[cfg.theme] || THEMES.bos;
+  const headingHTML = applyEmphasis(cfg.heading, cfg.emphasis);
+  const itemsJSON = JSON.stringify(cfg.categories.filter(c => c.name.trim() && c.items.some(i => i.name.trim()))
+    .map(c => ({ category: c.name, items: c.items.filter(i => i.name.trim()) })), null, 2);
+
+  const contactBlock = cfg.contactMethod === 'whatsapp'
+    ? "{ method:'whatsapp', value:" + JSON.stringify((cfg.contactWa||'').replace(/[^0-9]/g,'')) + " }"
+    : "{ method:'email', value:" + JSON.stringify(cfg.contactEmail||'') + " }";
+
+  return '<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>' + escapeHtml(cfg.heading) + '</title>\n' +
+'<link rel="preconnect" href="https://fonts.googleapis.com">\n<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">\n' +
+'<style>\n' +
+'  .bh-wrap{ --sand:' + t.sand + '; --sand-deep:' + t.sandDeep + '; --ink:' + t.ink + '; --ink-soft:' + t.inkSoft + '; --sage:' + t.a1 + '; --sage-deep:' + t.a1d + '; --clay:' + t.a2 + '; --clay-deep:' + t.a2d + '; --line:rgba(46,43,34,0.14);\n' +
+'    font-family:\'Ubuntu\', -apple-system, sans-serif; color:var(--ink); background:var(--sand); line-height:1.6; max-width:760px; margin:0 auto; position:relative; isolation:isolate; }\n' +
+'  .bh-wrap *{ box-sizing:border-box; }\n' +
+'  .bh-wrap::before{ content:\'\'; position:absolute; inset:0; z-index:-1;\n' +
+'    background: radial-gradient(circle at 6% 8%, rgba(' + hexToRgb(t.a1) + ',0.20), transparent 34%), radial-gradient(circle at 96% 4%, rgba(' + hexToRgb(t.a2) + ',0.18), transparent 38%), radial-gradient(circle at 10% 92%, rgba(' + hexToRgb(t.a2) + ',0.14), transparent 36%), radial-gradient(circle at 94% 88%, rgba(' + hexToRgb(t.a1) + ',0.16), transparent 36%), radial-gradient(circle at 50% 45%, rgba(' + hexToRgb(t.a1) + ',0.06), transparent 55%), url("data:image/svg+xml;base64,' + LEAF_SVG_BASE64 + '");\n' +
+'    background-repeat:repeat; background-size:100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,160px 160px; }\n' +
+'  .bh-serif{ font-family:\'Ubuntu\', sans-serif; }\n' +
+'  .bh-header{ padding:64px 28px 40px; }\n' +
+'  .bh-eyebrow{ font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage-deep); margin-bottom:18px; display:block; }\n' +
+'  .bh-header h1{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-size:clamp(28px,4.6vw,42px); line-height:1.22; margin:0 0 26px; max-width:16ch; }\n' +
+'  .bh-header h1 em{ font-style:italic; color:var(--clay-deep); }\n' +
+'  .bh-header p{ font-size:16.5px; color:var(--ink-soft); max-width:56ch; margin:0 0 14px; }\n' +
+'  .bh-divider{ height:1px; background:var(--line); margin:0 28px; }\n' +
+'  .bh-note{ margin:36px 28px 8px; font-size:14px; color:var(--ink-soft); padding:16px 20px; background:var(--sand-deep); border-radius:2px; max-width:640px; }\n' +
+'  .bh-note b{ color:var(--ink); }\n' +
+'  .bh-category{ padding:0 28px; margin-top:44px; }\n' +
+'  .bh-cat-head{ border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:6px; }\n' +
+'  .bh-cat-head h2{ font-family:\'Ubuntu\', sans-serif; font-weight:500; font-style:italic; font-size:21px; margin:0; }\n' +
+'  .bh-item{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding:15px 0; border-bottom:1px dashed var(--line); }\n' +
+'  .bh-item:last-child{ border-bottom:none; }\n' +
+'  .bh-item-text b{ display:block; font-size:15px; font-weight:600; }\n' +
+'  .bh-item-text span{ font-size:13px; color:var(--ink-soft); }\n' +
+'  .bh-offer-btn{ font-size:12.5px; padding:8px 14px; border-radius:20px; white-space:nowrap; font-weight:500; border:1px solid rgba(124,133,100,0.4); background:rgba(124,133,100,0.08); color:var(--sage-deep); cursor:pointer; font-family:\'Ubuntu\',sans-serif; }\n' +
+'  .bh-offer-btn:hover{ background:rgba(124,133,100,0.16); }\n' +
+'  .bh-suggest{ margin:56px 28px 0; padding:32px 30px; background:var(--ink); color:var(--sand); border-radius:2px; }\n' +
+'  .bh-suggest h2{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-style:italic; font-size:22px; margin:0 0 8px; }\n' +
+'  .bh-suggest p{ font-size:14px; color:#C9C4AC; margin:0 0 20px; max-width:48ch; }\n' +
+'  .bh-wrap input, .bh-wrap textarea{ font-family:\'Ubuntu\', sans-serif; background:#3B372A; border:1px solid rgba(242,236,222,0.2); color:var(--sand); border-radius:3px; padding:11px 13px; font-size:14px; width:100%; margin-bottom:10px; }\n' +
+'  .bh-btn-primary{ background:var(--clay); color:#241A0D; border:none; padding:11px 22px; border-radius:3px; font-weight:700; font-size:14px; cursor:pointer; font-family:\'Ubuntu\', sans-serif; }\n' +
+'  .bh-btn-primary:hover{ background:#CC9A6B; }\n' +
+'  .bh-footer{ padding:40px 28px 64px; font-size:12.5px; color:var(--ink-soft); }\n' +
+'  .bh-footer p{ max-width:52ch; margin:0; }\n' +
+'  .bh-modal-backdrop{ position:fixed; inset:0; background:rgba(46,43,34,0.5); display:none; align-items:center; justify-content:center; padding:20px; z-index:9999; }\n' +
+'  .bh-modal-backdrop.open{ display:flex; }\n' +
+'  .bh-modal{ background:var(--sand); border-radius:3px; padding:28px; max-width:380px; width:100%; }\n' +
+'  .bh-modal h3{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-style:italic; font-size:20px; margin:0 0 4px; color:var(--ink); }\n' +
+'  .bh-modal p.bh-sub{ font-size:13px; color:var(--ink-soft); margin:0 0 18px; }\n' +
+'  .bh-modal input{ background:#fff; color:var(--ink); border:1px solid var(--line); }\n' +
+'  .bh-modal-actions{ display:flex; gap:10px; margin-top:14px; }\n' +
+'  .bh-btn-ghost{ background:none; border:1px solid var(--line); color:var(--ink); padding:10px 16px; border-radius:3px; font-size:14px; cursor:pointer; flex:1; font-family:\'Ubuntu\', sans-serif; }\n' +
+'  .bh-modal .bh-btn-primary{ flex:1; }\n' +
+'</style>\n' +
+'<div class="bh-wrap">\n' +
+'<div class="bh-header">\n' +
+'  <span class="bh-eyebrow">' + escapeHtml(cfg.eyebrow) + '</span>\n' +
+'  <h1 class="bh-serif">' + headingHTML + '</h1>\n' +
+'  <p>' + escapeHtml(cfg.para1) + '</p>\n' +
+'  <p>' + escapeHtml(cfg.para2) + '</p>\n' +
+'</div>\n' +
+'<div class="bh-divider"></div>\n' +
+'<div class="bh-note"><b>Zo werkt het:</b> zie je iets dat je kunt missen? Klik op &ldquo;ik bied dit aan&rdquo; &mdash; er opent een kant-en-klaar bericht naar mij, dat jij zelf verstuurt. Is iets al geregeld, dan haal ik het van de lijst af.</div>\n' +
+'<div id="bh-categories"></div>\n' +
+'<div class="bh-suggest">\n' +
+'  <h2 class="bh-serif">Staat er iets niet bij?</h2>\n' +
+'  <p>' + escapeHtml(cfg.suggestDesc) + '</p>\n' +
+'  <input id="bh-sugg-name" placeholder="Je naam">\n' +
+'  <input id="bh-sugg-what" placeholder="Wat heb je voor me?">\n' +
+'  <textarea id="bh-sugg-note" placeholder="Eventuele toelichting" style="min-height:56px;"></textarea>\n' +
+'  <button class="bh-btn-primary" id="bh-sugg-submit">Verstuur</button>\n' +
+'</div>\n' +
+'<div class="bh-footer"><p>' + escapeHtml(cfg.footer) + '</p></div>\n' +
+'<div class="bh-modal-backdrop" id="bh-modal-backdrop">\n' +
+'  <div class="bh-modal">\n' +
+'    <h3 class="bh-serif" id="bh-modal-title">Wat fijn!</h3>\n' +
+'    <p class="bh-sub">Laat weten wie je bent — er opent daarna een bericht dat jij zelf verstuurt.</p>\n' +
+'    <input id="bh-claim-name" placeholder="Je naam">\n' +
+'    <div id="bh-claim-qty-wrap" style="display:none;">\n' +
+'      <label style="display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;">Hoeveel bied je aan?</label>\n' +
+'      <input id="bh-claim-qty" type="number" min="1" step="1" value="1" style="max-width:100px;">\n' +
+'    </div>\n' +
+'    <input id="bh-claim-note" placeholder="Eventuele toelichting (optioneel)">\n' +
+'    <div class="bh-modal-actions">\n' +
+'      <button class="bh-btn-ghost" id="bh-modal-cancel" type="button">Annuleren</button>\n' +
+'      <button class="bh-btn-primary" id="bh-modal-confirm" type="button">Bericht openen</button>\n' +
+'    </div>\n' +
+'  </div>\n' +
+'</div>\n' +
+'</div>\n' +
+'<script>\n' +
+'(function(){\n' +
+'var itemsData = ' + itemsJSON + ';\n' +
+'var contact = ' + contactBlock + ';\n' +
+'function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; }\n' +
+'function escapeHtml(str){ var d=document.createElement("div"); d.textContent=str; return d.innerHTML; }\n' +
+'function renderCategories(){\n' +
+'  var wrap=document.getElementById("bh-categories"); wrap.innerHTML="";\n' +
+'  itemsData.forEach(function(cat){\n' +
+'    var catEl=el("div","bh-category");\n' +
+'    var head=el("div","bh-cat-head"); head.appendChild(el("h2",null,escapeHtml(cat.category))); catEl.appendChild(head);\n' +
+'    cat.items.forEach(function(item){\n' +
+'      var needed = item.needed && item.needed>1 ? item.needed : 1;\n' +
+'      var row=el("div","bh-item");\n' +
+'      var textWrap=el("div","bh-item-text");\n' +
+'      var label = needed>1 ? (item.name+" ("+needed+"x)") : item.name;\n' +
+'      textWrap.appendChild(el("b",null,escapeHtml(label)));\n' +
+'      if(item.note) textWrap.appendChild(el("span",null,escapeHtml(item.note)));\n' +
+'      row.appendChild(textWrap);\n' +
+'      var btn=el("button","bh-offer-btn","Ik bied dit aan →");\n' +
+'      btn.type="button";\n' +
+'      btn.addEventListener("click", function(){ openModal(item.name, needed); });\n' +
+'      row.appendChild(btn);\n' +
+'      catEl.appendChild(row);\n' +
+'    });\n' +
+'    wrap.appendChild(catEl);\n' +
+'  });\n' +
+'}\n' +
+'var activeItemName=null, activeNeeded=1;\n' +
+'function openModal(name, needed){\n' +
+'  activeItemName=name; activeNeeded=needed;\n' +
+'  document.getElementById("bh-modal-title").textContent = name + " — top!";\n' +
+'  document.getElementById("bh-claim-name").value="";\n' +
+'  document.getElementById("bh-claim-note").value="";\n' +
+'  var qtyWrap=document.getElementById("bh-claim-qty-wrap"); var qtyInput=document.getElementById("bh-claim-qty");\n' +
+'  if(needed>1){ qtyWrap.style.display="block"; qtyInput.max=needed; qtyInput.value=1; } else { qtyWrap.style.display="none"; qtyInput.value=1; }\n' +
+'  document.getElementById("bh-modal-backdrop").classList.add("open");\n' +
+'}\n' +
+'function closeModal(){ document.getElementById("bh-modal-backdrop").classList.remove("open"); }\n' +
+'document.getElementById("bh-modal-cancel").addEventListener("click", closeModal);\n' +
+'document.getElementById("bh-modal-backdrop").addEventListener("click", function(e){ if(e.target.id==="bh-modal-backdrop") closeModal(); });\n' +
+'function openContact(message){\n' +
+'  if(contact.method==="whatsapp" && contact.value){\n' +
+'    window.open("https://wa.me/"+contact.value+"?text="+encodeURIComponent(message), "_blank");\n' +
+'  } else if(contact.value){\n' +
+'    window.location.href = "mailto:"+contact.value+"?subject="+encodeURIComponent("Aanbod: "+message.split("\\n")[0])+"&body="+encodeURIComponent(message);\n' +
+'  } else {\n' +
+'    alert("Er is nog geen contactgegeven ingesteld op deze pagina.");\n' +
+'  }\n' +
+'}\n' +
+'document.getElementById("bh-modal-confirm").addEventListener("click", function(){\n' +
+'  var name=document.getElementById("bh-claim-name").value.trim();\n' +
+'  var note=document.getElementById("bh-claim-note").value.trim();\n' +
+'  var qty=parseInt(document.getElementById("bh-claim-qty").value,10)||1;\n' +
+'  if(qty>activeNeeded) qty=activeNeeded; if(qty<1) qty=1;\n' +
+'  if(!name){ alert("Vul in elk geval je naam in."); return; }\n' +
+'  var msg = "Hoi! Ik bied " + (activeNeeded>1 ? qty+"x " : "") + activeItemName + " aan.\\nGroet, " + name + (note ? ("\\n\\n"+note) : "");\n' +
+'  openContact(msg);\n' +
+'  closeModal();\n' +
+'});\n' +
+'document.getElementById("bh-sugg-submit").addEventListener("click", function(){\n' +
+'  var name=document.getElementById("bh-sugg-name").value.trim();\n' +
+'  var what=document.getElementById("bh-sugg-what").value.trim();\n' +
+'  var note=document.getElementById("bh-sugg-note").value.trim();\n' +
+'  if(!name || !what){ alert("Vul je naam en wat je aanbiedt in."); return; }\n' +
+'  var msg = "Hoi! Ik heb iets voor je: " + what + "\\nGroet, " + name + (note ? ("\\n\\n"+note) : "");\n' +
+'  openContact(msg);\n' +
+'});\n' +
+'renderCategories();\n' +
+'})();\n' +
+'<\/script>\n' +
+'</html>';
+}
+
+let previewTimer = null;
+function updatePreview(){
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(() => {
+    const cfg = getFormValues();
+    cfg.categories = state.categories;
+    const html = buildSiteHTML(cfg);
+    document.getElementById('f-preview').srcdoc = html;
+    document.getElementById('f-code-output').value = html;
+
+    const warnEl = document.getElementById('f-warn');
+    if(cfg.contactMethod === 'email' && !cfg.contactEmail){
+      warnEl.style.display = 'block'; warnEl.textContent = 'Let op: vul een e-mailadres in, anders werkt de "ik bied dit aan"-knop niet.';
+    } else if(cfg.contactMethod === 'whatsapp' && !cfg.contactWa){
+      warnEl.style.display = 'block'; warnEl.textContent = 'Let op: vul een WhatsApp-nummer in, anders werkt de "ik bied dit aan"-knop niet.';
+    } else {
+      warnEl.style.display = 'none';
+    }
+  }, 120);
+}
+
+document.getElementById('f-download').addEventListener('click', () => {
+  const cfg = getFormValues(); cfg.categories = state.categories;
+  const html = buildSiteHTML(cfg);
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'oproeppagina.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('f-copy').addEventListener('click', async () => {
+  const cfg = getFormValues(); cfg.categories = state.categories;
+  const html = buildSiteHTML(cfg);
+  try{
+    await navigator.clipboard.writeText(html);
+    const btn = document.getElementById('f-copy');
+    const old = btn.textContent; btn.textContent = 'Gekopieerd!';
+    setTimeout(() => { btn.textContent = old; }, 1800);
+  }catch(e){
+    document.getElementById('f-code-output').select();
+    alert('Automatisch kopiëren lukte niet — de code hieronder is geselecteerd, gebruik Ctrl/Cmd+C.');
+  }
+});
+
+renderCategoriesForm();
+updatePreview();
+</script>
+</body>
+</html>
