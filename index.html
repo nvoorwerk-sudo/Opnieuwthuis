@@ -112,11 +112,22 @@
     </fieldset>
 
     <fieldset>
+      <legend>Jouw stijl (optioneel)</legend>
+      <label for="f-style-tags">Trefwoorden die je stijl omschrijven</label>
+      <input type="text" id="f-style-tags" placeholder="landelijk, stoer, industrieel">
+      <p class="hint">Komma-gescheiden. Geeft aanbieders een idee of iets past, ook zonder Pinterest-bord.</p>
+
+      <label for="f-pinterest">Link naar een Pinterest-bord (optioneel)</label>
+      <input type="text" id="f-pinterest" placeholder="https://pinterest.com/jouwnaam/mijn-stijl">
+    </fieldset>
+
+    <fieldset>
       <legend>Hoe mensen contact opnemen</legend>
       <label for="f-contact-method">Contactmethode</label>
       <select id="f-contact-method">
         <option value="email">E-mail</option>
         <option value="whatsapp">WhatsApp</option>
+        <option value="signal">Signal</option>
       </select>
       <div id="f-contact-email-wrap">
         <label for="f-contact-email">Je e-mailadres</label>
@@ -125,6 +136,11 @@
       <div id="f-contact-wa-wrap" style="display:none;">
         <label for="f-contact-wa">WhatsApp-nummer (met landcode, alleen cijfers)</label>
         <input type="tel" id="f-contact-wa" placeholder="31612345678">
+      </div>
+      <div id="f-contact-signal-wrap" style="display:none;">
+        <label for="f-contact-signal">Signal-nummer (met landcode, bijv. +31612345678)</label>
+        <input type="tel" id="f-contact-signal" placeholder="+31612345678">
+        <p class="hint">Signal ondersteunt geen vooraf ingevuld bericht: de tekst wordt gekopieerd naar het klembord, zodat iemand 'm zelf kan plakken.</p>
       </div>
       <p class="hint">Als iemand op "ik bied dit aan" klikt, opent er een kant-en-klaar bericht naar jou — er wordt niets automatisch opgeslagen of bijgehouden.</p>
     </fieldset>
@@ -167,6 +183,8 @@ const THEMES = {
   warmte: { sand:'#F5EDE3', sandDeep:'#EEDFCB', ink:'#332420', inkSoft:'#6B4F3F', a1:'#C98A3F', a1d:'#A66C2A', a2:'#B15C42', a2d:'#8E4530' },
 };
 const LEAF_SVG_BASE64 = "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMjAiIGhlaWdodD0iMjIwIiB2aWV3Qm94PSIwIDAgMjIwIDIyMCI+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNkU2MjQ4IiBzdHJva2Utd2lkdGg9IjEuMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjE0Ij4KICAgIDxwYXRoIGQ9Ik0xMDAgMjA4IEMgNjggMTUwLCA1OCA4OCwgOTYgMjQgQyAxMzIgODgsIDE0MiAxNTAsIDExNiAyMDggQyAxMTAgMjA1LCAxMDUgMjA1LCAxMDAgMjA4IFoiIC8+CiAgICA8cGF0aCBkPSJNOTkgMjAyIEMgOTcgMTUwLCA5OSA4OCwgOTcgMjgiIC8+CiAgICA8cGF0aCBkPSJNOTggMTcyIEMgODUgMTY3LCA3NSAxNjAsIDY4IDE0NyIgLz4KICAgIDxwYXRoIGQ9Ik05OSAxNzIgQyAxMTEgMTY4LCAxMjAgMTYxLCAxMjYgMTQ5IiAvPgogICAgPHBhdGggZD0iTTk4IDE0MiBDIDg2IDEzOCwgNzYgMTMxLCA3MCAxMTgiIC8+CiAgICA8cGF0aCBkPSJNOTkgMTQyIEMgMTExIDEzOCwgMTIwIDEzMSwgMTI2IDExOSIgLz4KICAgIDxwYXRoIGQ9Ik05OCAxMTIgQyA4NyAxMDgsIDc4IDEwMSwgNzMgODgiIC8+CiAgICA8cGF0aCBkPSJNOTkgMTEyIEMgMTExIDEwOCwgMTE5IDEwMSwgMTI0IDg5IiAvPgogICAgPHBhdGggZD0iTTk4IDgyIEMgODkgNzgsIDgxIDcyLCA3NyA2MCIgLz4KICAgIDxwYXRoIGQ9Ik05OCA4MiBDIDEwNyA3OCwgMTE0IDcyLCAxMTggNjEiIC8+CiAgPC9nPgo8L3N2Zz4K";
+const LEAF2_SVG_BASE64 = "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTUwIDE1MCkgcm90YXRlKDM0KSBzY2FsZSgwLjcyKSB0cmFuc2xhdGUoLTExMCAtMTEwKSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNkU2MjQ4IiBzdHJva2Utd2lkdGg9IjEuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjA4NSI+CiAgICA8cGF0aCBkPSJNMTAwIDIwOCBDIDY4IDE1MCwgNTggODgsIDk2IDI0IEMgMTMyIDg4LCAxNDIgMTUwLCAxMTYgMjA4IEMgMTEwIDIwNSwgMTA1IDIwNSwgMTAwIDIwOCBaIiAvPgogICAgPHBhdGggZD0iTTk5IDIwMiBDIDk3IDE1MCwgOTkgODgsIDk3IDI4IiAvPgogICAgPHBhdGggZD0iTTk4IDE3MiBDIDg1IDE2NywgNzUgMTYwLCA2OCAxNDciIC8+CiAgICA8cGF0aCBkPSJNOTkgMTcyIEMgMTExIDE2OCwgMTIwIDE2MSwgMTI2IDE0OSIgLz4KICAgIDxwYXRoIGQ9Ik05OCAxNDIgQyA4NiAxMzgsIDc2IDEzMSwgNzAgMTE4IiAvPgogICAgPHBhdGggZD0iTTk5IDE0MiBDIDExMSAxMzgsIDEyMCAxMzEsIDEyNiAxMTkiIC8+CiAgICA8cGF0aCBkPSJNOTggMTEyIEMgODcgMTA4LCA3OCAxMDEsIDczIDg4IiAvPgogICAgPHBhdGggZD0iTTk5IDExMiBDIDExMSAxMDgsIDExOSAxMDEsIDEyNCA4OSIgLz4KICAgIDxwYXRoIGQ9Ik05OCA4MiBDIDg5IDc4LCA4MSA3MiwgNzcgNjAiIC8+CiAgICA8cGF0aCBkPSJNOTggODIgQyAxMDcgNzgsIDExNCA3MiwgMTE4IDYxIiAvPgogIDwvZz4KPC9zdmc+Cg==";
+const GRAIN_SVG_BASE64 = "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgMTgwIDE4MCI+CiAgPGZpbHRlciBpZD0ibiI+CiAgICA8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44NSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIgcmVzdWx0PSJub2lzZSIvPgogICAgPGZlQ29sb3JNYXRyaXggaW49Im5vaXNlIiB0eXBlPSJtYXRyaXgiIHZhbHVlcz0iMCAwIDAgMCAwLjQzICAwIDAgMCAwIDAuMzggIDAgMCAwIDAgMC4yOCAgMCAwIDAgMC4wNiAwIi8+CiAgPC9maWx0ZXI+CiAgPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIGZpbHRlcj0idXJsKCNuKSIvPgo8L3N2Zz4K";
 
 function hexToRgb(hex){
   const h = hex.replace('#','');
@@ -271,32 +289,50 @@ function getFormValues(){
     emphasis: document.getElementById('f-emphasis').value,
     para1: document.getElementById('f-para1').value,
     para2: document.getElementById('f-para2').value,
+    styleTags: document.getElementById('f-style-tags').value,
+    pinterestUrl: document.getElementById('f-pinterest').value,
     contactMethod: document.getElementById('f-contact-method').value,
     contactEmail: document.getElementById('f-contact-email').value,
     contactWa: document.getElementById('f-contact-wa').value,
+    contactSignal: document.getElementById('f-contact-signal').value,
     suggestDesc: document.getElementById('f-suggest-desc').value,
     footer: document.getElementById('f-footer').value,
   };
 }
 
 document.getElementById('f-contact-method').addEventListener('change', function(){
-  const isEmail = this.value === 'email';
-  document.getElementById('f-contact-email-wrap').style.display = isEmail ? 'block' : 'none';
-  document.getElementById('f-contact-wa-wrap').style.display = isEmail ? 'none' : 'block';
+  document.getElementById('f-contact-email-wrap').style.display = this.value === 'email' ? 'block' : 'none';
+  document.getElementById('f-contact-wa-wrap').style.display = this.value === 'whatsapp' ? 'block' : 'none';
+  document.getElementById('f-contact-signal-wrap').style.display = this.value === 'signal' ? 'block' : 'none';
   updatePreview();
 });
 
-['f-theme','f-eyebrow','f-heading','f-emphasis','f-para1','f-para2','f-contact-email','f-contact-wa','f-suggest-desc','f-footer']
+['f-theme','f-eyebrow','f-heading','f-emphasis','f-para1','f-para2','f-style-tags','f-pinterest','f-contact-email','f-contact-wa','f-contact-signal','f-suggest-desc','f-footer']
   .forEach(id => document.getElementById(id).addEventListener('input', updatePreview));
 
 function buildSiteHTML(cfg){
   const t = THEMES[cfg.theme] || THEMES.bos;
   const headingHTML = applyEmphasis(cfg.heading, cfg.emphasis);
+  const styleTags = (cfg.styleTags||'').split(',').map(s => s.trim()).filter(Boolean);
+  const pinterestUrl = (cfg.pinterestUrl||'').trim();
+  let styleBlockHTML = '';
+  if(styleTags.length || pinterestUrl){
+    styleBlockHTML = '<div class="bh-style">';
+    if(styleTags.length){
+      styleBlockHTML += '<div class="bh-tags">' + styleTags.map(tag => '<span class="bh-tag">' + escapeHtml(tag) + '</span>').join('') + '</div>';
+    }
+    if(pinterestUrl){
+      styleBlockHTML += '<a class="bh-pin-link" href="' + escapeHtml(pinterestUrl) + '" target="_blank" rel="noopener noreferrer">Bekijk mijn stijl op Pinterest ↗</a>';
+    }
+    styleBlockHTML += '</div>';
+  }
   const itemsJSON = JSON.stringify(cfg.categories.filter(c => c.name.trim() && c.items.some(i => i.name.trim()))
     .map(c => ({ category: c.name, items: c.items.filter(i => i.name.trim()) })), null, 2);
 
   const contactBlock = cfg.contactMethod === 'whatsapp'
     ? "{ method:'whatsapp', value:" + JSON.stringify((cfg.contactWa||'').replace(/[^0-9]/g,'')) + " }"
+    : cfg.contactMethod === 'signal'
+    ? "{ method:'signal', value:" + JSON.stringify((cfg.contactSignal||'').replace(/[^0-9+]/g,'')) + " }"
     : "{ method:'email', value:" + JSON.stringify(cfg.contactEmail||'') + " }";
 
   return '<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>' + escapeHtml(cfg.heading) + '</title>\n' +
@@ -306,14 +342,31 @@ function buildSiteHTML(cfg){
 '    font-family:\'Ubuntu\', -apple-system, sans-serif; color:var(--ink); background:var(--sand); line-height:1.6; max-width:760px; margin:0 auto; position:relative; isolation:isolate; }\n' +
 '  .bh-wrap *{ box-sizing:border-box; }\n' +
 '  .bh-wrap::before{ content:\'\'; position:absolute; inset:0; z-index:-1;\n' +
-'    background: radial-gradient(circle at 6% 8%, rgba(' + hexToRgb(t.a1) + ',0.20), transparent 34%), radial-gradient(circle at 96% 4%, rgba(' + hexToRgb(t.a2) + ',0.18), transparent 38%), radial-gradient(circle at 10% 92%, rgba(' + hexToRgb(t.a2) + ',0.14), transparent 36%), radial-gradient(circle at 94% 88%, rgba(' + hexToRgb(t.a1) + ',0.16), transparent 36%), radial-gradient(circle at 50% 45%, rgba(' + hexToRgb(t.a1) + ',0.06), transparent 55%), url("data:image/svg+xml;base64,' + LEAF_SVG_BASE64 + '");\n' +
-'    background-repeat:repeat; background-size:100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,160px 160px; }\n' +
+'    background:\n' +
+'      url("data:image/svg+xml;base64,' + GRAIN_SVG_BASE64 + '"),\n' +
+'      radial-gradient(circle at 6% 8%, rgba(' + hexToRgb(t.a1) + ',0.20), transparent 34%),\n' +
+'      radial-gradient(circle at 96% 4%, rgba(' + hexToRgb(t.a2) + ',0.18), transparent 38%),\n' +
+'      radial-gradient(circle at 10% 92%, rgba(' + hexToRgb(t.a2) + ',0.14), transparent 36%),\n' +
+'      radial-gradient(circle at 94% 88%, rgba(' + hexToRgb(t.a1) + ',0.16), transparent 36%),\n' +
+'      radial-gradient(circle at 50% 45%, rgba(' + hexToRgb(t.a1) + ',0.06), transparent 55%),\n' +
+'      url("data:image/svg+xml;base64,' + LEAF2_SVG_BASE64 + '"),\n' +
+'      url("data:image/svg+xml;base64,' + LEAF_SVG_BASE64 + '");\n' +
+'    background-blend-mode: soft-light, normal, normal, normal, normal, normal, normal, normal;\n' +
+'    background-repeat: repeat;\n' +
+'    background-size: 170px 170px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 300px 300px, 220px 220px;\n' +
+'    background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 65px 40px, 0 0;\n' +
+'  }\n' +
 '  .bh-serif{ font-family:\'Ubuntu\', sans-serif; }\n' +
 '  .bh-header{ padding:64px 28px 40px; }\n' +
 '  .bh-eyebrow{ font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--sage-deep); margin-bottom:18px; display:block; }\n' +
 '  .bh-header h1{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-size:clamp(28px,4.6vw,42px); line-height:1.22; margin:0 0 26px; max-width:16ch; }\n' +
 '  .bh-header h1 em{ font-style:italic; color:var(--clay-deep); }\n' +
 '  .bh-header p{ font-size:16.5px; color:var(--ink-soft); max-width:56ch; margin:0 0 14px; }\n' +
+'  .bh-style{ margin-top:6px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }\n' +
+'  .bh-tags{ display:flex; flex-wrap:wrap; gap:8px; }\n' +
+'  .bh-tag{ font-size:12px; padding:5px 12px; border-radius:20px; border:1px solid var(--line); color:var(--ink-soft); background:rgba(255,255,255,0.35); }\n' +
+'  .bh-pin-link{ font-size:13px; color:var(--clay-deep); text-decoration:none; border-bottom:1px solid rgba(156,111,68,0.4); }\n' +
+'  .bh-pin-link:hover{ border-bottom-color:var(--clay-deep); }\n' +
 '  .bh-divider{ height:1px; background:var(--line); margin:0 28px; }\n' +
 '  .bh-note{ margin:36px 28px 8px; font-size:14px; color:var(--ink-soft); padding:16px 20px; background:var(--sand-deep); border-radius:2px; max-width:640px; }\n' +
 '  .bh-note b{ color:var(--ink); }\n' +
@@ -350,6 +403,7 @@ function buildSiteHTML(cfg){
 '  <h1 class="bh-serif">' + headingHTML + '</h1>\n' +
 '  <p>' + escapeHtml(cfg.para1) + '</p>\n' +
 '  <p>' + escapeHtml(cfg.para2) + '</p>\n' +
+'  ' + styleBlockHTML + '\n' +
 '</div>\n' +
 '<div class="bh-divider"></div>\n' +
 '<div class="bh-note"><b>Zo werkt het:</b> zie je iets dat je kunt missen? Klik op &ldquo;ik bied dit aan&rdquo; &mdash; er opent een kant-en-klaar bericht naar mij, dat jij zelf verstuurt. Is iets al geregeld, dan haal ik het van de lijst af.</div>\n' +
@@ -424,7 +478,15 @@ function buildSiteHTML(cfg){
 'function openContact(message){\n' +
 '  if(contact.method==="whatsapp" && contact.value){\n' +
 '    window.open("https://wa.me/"+contact.value+"?text="+encodeURIComponent(message), "_blank");\n' +
-'  } else if(contact.value){\n' +
+'  } else if(contact.method==="signal" && contact.value){\n' +
+'    window.open("https://signal.me/#p/"+contact.value, "_blank");\n' +
+'    var copyPromise = (navigator.clipboard && navigator.clipboard.writeText) ? navigator.clipboard.writeText(message) : Promise.reject();\n' +
+'    copyPromise.then(function(){\n' +
+'      alert("Je bericht is gekopieerd naar het klembord — plak het in Signal.");\n' +
+'    }).catch(function(){\n' +
+'      window.prompt("Kopieer dit bericht en plak het in Signal:", message);\n' +
+'    });\n' +
+'  } else if(contact.method==="email" && contact.value){\n' +
 '    window.location.href = "mailto:"+contact.value+"?subject="+encodeURIComponent("Aanbod: "+message.split("\\n")[0])+"&body="+encodeURIComponent(message);\n' +
 '  } else {\n' +
 '    alert("Er is nog geen contactgegeven ingesteld op deze pagina.");\n' +
@@ -469,6 +531,8 @@ function updatePreview(){
       warnEl.style.display = 'block'; warnEl.textContent = 'Let op: vul een e-mailadres in, anders werkt de "ik bied dit aan"-knop niet.';
     } else if(cfg.contactMethod === 'whatsapp' && !cfg.contactWa){
       warnEl.style.display = 'block'; warnEl.textContent = 'Let op: vul een WhatsApp-nummer in, anders werkt de "ik bied dit aan"-knop niet.';
+    } else if(cfg.contactMethod === 'signal' && !cfg.contactSignal){
+      warnEl.style.display = 'block'; warnEl.textContent = 'Let op: vul een Signal-nummer in, anders werkt de "ik bied dit aan"-knop niet.';
     } else {
       warnEl.style.display = 'none';
     }
