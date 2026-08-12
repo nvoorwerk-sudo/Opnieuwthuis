@@ -20,8 +20,34 @@
 
   .layout{ display:flex; gap:0; align-items:flex-start; min-height:calc(100vh - 90px); }
   .form-col{ width:44%; min-width:360px; padding:28px; overflow-y:auto; max-height:calc(100vh - 90px); }
-  .preview-col{ flex:1; position:sticky; top:0; height:calc(100vh - 90px); background:#ddd6c4; padding:20px; }
-  .preview-col iframe{ width:100%; height:100%; border:1px solid var(--line); background:#fff; }
+  .preview-col{ flex:1; position:sticky; top:0; height:calc(100vh - 90px); background:#ddd6c4; padding:20px; display:flex; flex-direction:column; }
+  .preview-toolbar{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex:0 0 auto; }
+  .preview-toolbar span{ font-size:12px; color:var(--ink-soft); }
+  .device-toggle{ display:flex; gap:4px; }
+  .device-toggle button{ border:1px solid var(--line); background:var(--panel); color:var(--ink-soft); border-radius:4px; padding:5px 10px; font-size:12px; cursor:pointer; font-family:'Ubuntu', sans-serif; }
+  .device-toggle button.active{ background:var(--ink); color:var(--sand); border-color:var(--ink); }
+  .preview-frame-wrap{ flex:1 1 auto; min-height:0; display:flex; justify-content:center; }
+  .preview-frame-wrap.mobile iframe{ flex:0 0 390px; max-width:100%; }
+  .preview-col iframe{ flex:1 1 auto; align-self:stretch; width:100%; border:1px solid var(--line); background:#fff; transition:flex-basis .15s ease; }
+
+  /* Toetsenbordfocus altijd zichtbaar */
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible{
+    outline:2px solid var(--clay-deep); outline-offset:2px;
+  }
+
+  .view-tabs{ display:none; }
+  @media (max-width: 900px){
+    .layout{ flex-direction:column; }
+    .form-col{ width:100%; min-width:0; max-height:none; overflow-y:visible; padding:18px 16px 96px; }
+    .form-col.tab-hidden{ display:none; }
+    .preview-col{ position:static; height:80vh; padding:14px; }
+    .preview-col.tab-hidden{ display:none; }
+    .view-tabs{ display:flex; gap:8px; padding:0 16px 14px; }
+    .view-tabs button{ flex:1; padding:10px; border-radius:6px; border:1px solid var(--line); background:var(--panel); color:var(--ink-soft); font-family:'Ubuntu', sans-serif; font-size:13px; font-weight:500; cursor:pointer; }
+    .view-tabs button.active{ background:var(--ink); color:var(--sand); border-color:var(--ink); }
+    .item-row{ flex-wrap:wrap; }
+    .item-row input[type=text]{ flex:1 1 120px; }
+  }
 
   fieldset{ border:1px solid var(--line); border-radius:6px; padding:16px 16px 18px; margin:0 0 20px; background:var(--panel); }
   legend{ font-weight:700; font-size:13px; padding:0 6px; color:var(--ink); }
@@ -36,6 +62,7 @@
   .row2{ display:flex; gap:10px; }
   .row2 > *{ flex:1; }
 
+  .category-count{ font-size:11.5px; color:#8A8770; margin:-6px 0 12px; }
   .category-block{ border:1px dashed var(--line); border-radius:5px; padding:12px; margin-bottom:12px; background:#fff; }
   .category-block-head{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
   .category-block-head input{ flex:1; font-weight:600; }
@@ -43,19 +70,39 @@
   .item-row input[type=text]{ flex:2; }
   .item-row input[type=text].note-input{ flex:2; }
   .item-row input[type=number]{ flex:0 0 64px; }
+  .new-toggle{
+    display:flex; align-items:center; gap:4px; flex:0 0 auto; font-size:11.5px; color:var(--ink-soft);
+    white-space:nowrap; cursor:pointer; user-select:none;
+  }
+  .new-toggle input{ margin:0; width:14px; height:14px; cursor:pointer; }
+  .order-btns{ display:flex; flex-direction:column; gap:2px; flex:0 0 auto; }
+  .order-btns button{
+    width:22px; height:14px; font-size:9px; line-height:1; border:1px solid var(--line);
+    background:#fff; color:var(--ink-soft); cursor:pointer; padding:0; border-radius:2px;
+  }
+  .order-btns button:disabled{ opacity:.3; cursor:default; }
+  .order-btns button:not(:disabled):hover{ background:var(--sand-deep); }
   .icon-btn{
     border:1px solid var(--line); background:#fff; color:var(--ink-soft); border-radius:4px;
     width:30px; height:30px; flex:0 0 30px; cursor:pointer; font-size:15px; line-height:1;
   }
-  .icon-btn:hover{ background:var(--sand-deep); }
+  .icon-btn:hover{ background:#F2DCD3; border-color:#D99C8B; color:#9C4A2A; }
   .text-btn{
     background:none; border:1px solid var(--sage-deep); color:var(--sage-deep); border-radius:4px;
     padding:7px 12px; font-size:12.5px; cursor:pointer; font-family:'Ubuntu', sans-serif;
   }
   .text-btn:hover{ background:rgba(94,104,73,0.08); }
-  .remove-cat{ border:none; background:none; color:#9C6F44; cursor:pointer; font-size:13px; }
+  .remove-cat{
+    border:1px solid transparent; background:none; color:#9C6F44; cursor:pointer; font-size:12.5px;
+    padding:5px 8px; border-radius:4px; font-family:'Ubuntu', sans-serif;
+  }
+  .remove-cat:hover{ background:#F2DCD3; color:#9C4A2A; }
+  .empty-state{ font-size:13px; color:var(--ink-soft); text-align:center; padding:18px 10px; border:1px dashed var(--line); border-radius:5px; background:#fff; }
 
-  .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .actions{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; position:sticky; bottom:0;
+    background:var(--sand); padding:14px 0 6px; border-top:1px solid var(--line); z-index:5;
+  }
   .btn-primary{
     background:var(--clay); border:none; color:#241A0D; font-weight:700; padding:12px 20px;
     border-radius:4px; font-size:14px; cursor:pointer; font-family:'Ubuntu', sans-serif;
@@ -65,7 +112,8 @@
     background:var(--ink); color:var(--sand); border:none; padding:12px 20px; border-radius:4px;
     font-size:14px; cursor:pointer; font-family:'Ubuntu', sans-serif;
   }
-  .warn{ font-size:12.5px; color:#9C4A2A; margin-top:8px; }
+  .btn-primary:disabled, .btn-secondary:disabled{ opacity:.5; cursor:not-allowed; }
+  .warn{ font-size:12.5px; color:#9C4A2A; margin-top:8px; padding:8px 10px; background:#F7E7CF; border-radius:4px; border:1px solid rgba(156,74,42,0.25); }
   .code-fallback{ margin-top:14px; }
   .code-fallback summary{ cursor:pointer; font-size:12.5px; color:var(--ink-soft); }
   .code-fallback textarea{ margin-top:8px; height:160px; font-family:monospace; font-size:11.5px; }
@@ -78,8 +126,13 @@
   <p>Voor iedereen die opnieuw begint: na een scheiding, de eerste eigen woning, na een brand, of iets anders. Vul het formulier links in, bekijk rechts direct hoe je pagina eruitziet, en download of kopieer 'm onderaan — geen code nodig.</p>
 </div>
 
+<div class="view-tabs">
+  <button type="button" id="tab-form" class="active">Formulier</button>
+  <button type="button" id="tab-preview">Voorbeeld</button>
+</div>
+
 <div class="layout">
-  <div class="form-col">
+  <div class="form-col" id="form-col">
 
     <fieldset>
       <legend>Uiterlijk</legend>
@@ -159,7 +212,7 @@
       <textarea id="f-footer">Dank je wel dat je meedenkt — elk aanbod scheelt mij een nieuwe aankoop.</textarea>
     </fieldset>
 
-    <div id="f-warn" class="warn" style="display:none;"></div>
+    <div id="f-warn" class="warn" style="display:none;" role="alert" aria-live="polite"></div>
     <div class="actions">
       <button class="btn-primary" id="f-download" type="button">Download jouw pagina (HTML)</button>
       <button class="btn-secondary" id="f-copy" type="button">Kopieer HTML</button>
@@ -167,12 +220,21 @@
 
     <details class="code-fallback">
       <summary>Lukt kopiëren niet? Selecteer de code hier handmatig</summary>
-      <textarea id="f-code-output" readonly></textarea>
+      <textarea id="f-code-output" readonly aria-label="HTML-code van jouw pagina"></textarea>
     </details>
   </div>
 
-  <div class="preview-col">
-    <iframe id="f-preview" title="Voorbeeld"></iframe>
+  <div class="preview-col" id="preview-col">
+    <div class="preview-toolbar">
+      <span>Live voorbeeld</span>
+      <div class="device-toggle">
+        <button type="button" id="device-desktop" class="active">Breed scherm</button>
+        <button type="button" id="device-mobile">Telefoon</button>
+      </div>
+    </div>
+    <div class="preview-frame-wrap" id="preview-frame-wrap">
+      <iframe id="f-preview" title="Voorbeeld van jouw oproeppagina"></iframe>
+    </div>
   </div>
 </div>
 
@@ -207,17 +269,17 @@ function applyEmphasis(headingRaw, wordRaw){
 let state = {
   categories: [
     { name: "Keuken", items: [
-      { name: "Kleine pannenset", note: "voor 1-2 personen", needed: 1 },
-      { name: "Waterkoker", note: "", needed: 1 },
-      { name: "Bestek", note: "voor 2 personen", needed: 2 },
+      { name: "Kleine pannenset", note: "voor 1-2 personen", needed: 1, isNew: false },
+      { name: "Waterkoker", note: "", needed: 1, isNew: false },
+      { name: "Bestek", note: "voor 2 personen", needed: 2, isNew: false },
     ]},
     { name: "Woonkamer", items: [
-      { name: "Leeslamp", note: "staand of tafel", needed: 1 },
-      { name: "Vloerkleed", note: "ca. 2x1,5m", needed: 1 },
+      { name: "Leeslamp", note: "staand of tafel", needed: 1, isNew: false },
+      { name: "Vloerkleed", note: "ca. 2x1,5m", needed: 1, isNew: false },
     ]},
     { name: "Slaapkamer", items: [
-      { name: "Eenpersoonsmatras of bed", note: "", needed: 1 },
-      { name: "Dekbed + overtrek", note: "", needed: 1 },
+      { name: "Eenpersoonsmatras of bed", note: "", needed: 1, isNew: false },
+      { name: "Dekbed + overtrek", note: "", needed: 1, isNew: false },
     ]},
   ]
 };
@@ -225,49 +287,113 @@ let state = {
 function renderCategoriesForm(){
   const wrap = document.getElementById('f-categories');
   wrap.innerHTML = '';
+
+  if(state.categories.length === 0){
+    const empty = document.createElement('p');
+    empty.className = 'empty-state';
+    empty.textContent = 'Nog geen categorieën. Klik hieronder op "+ Categorie toevoegen" om te beginnen.';
+    wrap.appendChild(empty);
+  }
+
   state.categories.forEach((cat, ci) => {
     const block = document.createElement('div');
     block.className = 'category-block';
 
     const head = document.createElement('div');
     head.className = 'category-block-head';
+
+    const catOrder = document.createElement('div');
+    catOrder.className = 'order-btns';
+    const catUp = document.createElement('button');
+    catUp.type = 'button'; catUp.textContent = '▲'; catUp.title = 'Categorie omhoog'; catUp.setAttribute('aria-label', 'Verplaats categorie "' + (cat.name || 'naamloos') + '" omhoog');
+    catUp.disabled = ci === 0;
+    catUp.addEventListener('click', () => { [state.categories[ci-1], state.categories[ci]] = [state.categories[ci], state.categories[ci-1]]; renderCategoriesForm(); updatePreview(); });
+    const catDown = document.createElement('button');
+    catDown.type = 'button'; catDown.textContent = '▼'; catDown.title = 'Categorie omlaag'; catDown.setAttribute('aria-label', 'Verplaats categorie "' + (cat.name || 'naamloos') + '" omlaag');
+    catDown.disabled = ci === state.categories.length - 1;
+    catDown.addEventListener('click', () => { [state.categories[ci+1], state.categories[ci]] = [state.categories[ci], state.categories[ci+1]]; renderCategoriesForm(); updatePreview(); });
+    catOrder.appendChild(catUp); catOrder.appendChild(catDown);
+
     const nameInput = document.createElement('input');
     nameInput.type = 'text'; nameInput.value = cat.name; nameInput.placeholder = 'Naam categorie';
+    nameInput.setAttribute('aria-label', 'Naam van categorie ' + (ci+1));
     nameInput.addEventListener('input', () => { state.categories[ci].name = nameInput.value; updatePreview(); });
     const removeCatBtn = document.createElement('button');
     removeCatBtn.className = 'remove-cat'; removeCatBtn.type = 'button'; removeCatBtn.textContent = 'verwijder categorie';
-    removeCatBtn.addEventListener('click', () => { state.categories.splice(ci,1); renderCategoriesForm(); updatePreview(); });
-    head.appendChild(nameInput); head.appendChild(removeCatBtn);
+    removeCatBtn.addEventListener('click', () => {
+      const label = cat.name.trim() || 'deze categorie';
+      const count = cat.items.length;
+      const msg = count > 0
+        ? 'Weet je het zeker? "' + label + '" wordt verwijderd, inclusief ' + count + ' item' + (count === 1 ? '' : 's') + '.'
+        : 'Weet je het zeker? "' + label + '" wordt verwijderd.';
+      if(!window.confirm(msg)) return;
+      state.categories.splice(ci,1); renderCategoriesForm(); updatePreview();
+    });
+    head.appendChild(catOrder); head.appendChild(nameInput); head.appendChild(removeCatBtn);
     block.appendChild(head);
+
+    if(cat.items.length === 0){
+      const emptyItems = document.createElement('p');
+      emptyItems.className = 'hint';
+      emptyItems.style.margin = '0 0 8px';
+      emptyItems.textContent = 'Deze categorie heeft nog geen items.';
+      block.appendChild(emptyItems);
+    }
 
     cat.items.forEach((item, ii) => {
       const row = document.createElement('div');
       row.className = 'item-row';
 
+      const itemOrder = document.createElement('div');
+      itemOrder.className = 'order-btns';
+      const itemUp = document.createElement('button');
+      itemUp.type = 'button'; itemUp.textContent = '▲'; itemUp.title = 'Item omhoog'; itemUp.setAttribute('aria-label', 'Verplaats item "' + (item.name || 'naamloos') + '" omhoog');
+      itemUp.disabled = ii === 0;
+      itemUp.addEventListener('click', () => { [cat.items[ii-1], cat.items[ii]] = [cat.items[ii], cat.items[ii-1]]; renderCategoriesForm(); updatePreview(); });
+      const itemDown = document.createElement('button');
+      itemDown.type = 'button'; itemDown.textContent = '▼'; itemDown.title = 'Item omlaag'; itemDown.setAttribute('aria-label', 'Verplaats item "' + (item.name || 'naamloos') + '" omlaag');
+      itemDown.disabled = ii === cat.items.length - 1;
+      itemDown.addEventListener('click', () => { [cat.items[ii+1], cat.items[ii]] = [cat.items[ii], cat.items[ii+1]]; renderCategoriesForm(); updatePreview(); });
+      itemOrder.appendChild(itemUp); itemOrder.appendChild(itemDown);
+
       const nameI = document.createElement('input');
       nameI.type = 'text'; nameI.value = item.name; nameI.placeholder = 'Naam item';
+      nameI.setAttribute('aria-label', 'Naam van item');
       nameI.addEventListener('input', () => { state.categories[ci].items[ii].name = nameI.value; updatePreview(); });
 
       const noteI = document.createElement('input');
       noteI.type = 'text'; noteI.className = 'note-input'; noteI.value = item.note; noteI.placeholder = 'Toelichting (optioneel)';
+      noteI.setAttribute('aria-label', 'Toelichting bij item');
       noteI.addEventListener('input', () => { state.categories[ci].items[ii].note = noteI.value; updatePreview(); });
 
       const neededI = document.createElement('input');
       neededI.type = 'number'; neededI.min = '1'; neededI.value = item.needed || 1; neededI.title = 'Aantal nodig';
+      neededI.setAttribute('aria-label', 'Aantal nodig van dit item');
       neededI.addEventListener('input', () => { state.categories[ci].items[ii].needed = Math.max(1, parseInt(neededI.value,10)||1); updatePreview(); });
+
+      const newLabel = document.createElement('label');
+      newLabel.className = 'new-toggle';
+      newLabel.title = 'Toon een "Nieuw"-label bij dit item op de oproeppagina';
+      const newCheck = document.createElement('input');
+      newCheck.type = 'checkbox'; newCheck.checked = !!item.isNew;
+      newCheck.setAttribute('aria-label', 'Markeer "' + (item.name || 'dit item') + '" als nieuw');
+      newCheck.addEventListener('change', () => { state.categories[ci].items[ii].isNew = newCheck.checked; updatePreview(); });
+      newLabel.appendChild(newCheck);
+      newLabel.appendChild(document.createTextNode('nieuw'));
 
       const removeItemBtn = document.createElement('button');
       removeItemBtn.className = 'icon-btn'; removeItemBtn.type = 'button'; removeItemBtn.textContent = '×';
+      removeItemBtn.setAttribute('aria-label', 'Verwijder item "' + (item.name || 'naamloos') + '"');
       removeItemBtn.addEventListener('click', () => { state.categories[ci].items.splice(ii,1); renderCategoriesForm(); updatePreview(); });
 
-      row.appendChild(nameI); row.appendChild(noteI); row.appendChild(neededI); row.appendChild(removeItemBtn);
+      row.appendChild(itemOrder); row.appendChild(nameI); row.appendChild(noteI); row.appendChild(neededI); row.appendChild(newLabel); row.appendChild(removeItemBtn);
       block.appendChild(row);
     });
 
     const addItemBtn = document.createElement('button');
     addItemBtn.className = 'text-btn'; addItemBtn.type = 'button'; addItemBtn.textContent = '+ Item toevoegen';
     addItemBtn.addEventListener('click', () => {
-      state.categories[ci].items.push({ name: 'Nieuw item', note: '', needed: 1 });
+      state.categories[ci].items.push({ name: 'Nieuw item', note: '', needed: 1, isNew: true });
       renderCategoriesForm(); updatePreview();
     });
     block.appendChild(addItemBtn);
@@ -277,7 +403,7 @@ function renderCategoriesForm(){
 }
 
 document.getElementById('f-add-category').addEventListener('click', () => {
-  state.categories.push({ name: 'Nieuwe categorie', items: [{ name: 'Nieuw item', note: '', needed: 1 }] });
+  state.categories.push({ name: 'Nieuwe categorie', items: [{ name: 'Nieuw item', note: '', needed: 1, isNew: false }] });
   renderCategoriesForm(); updatePreview();
 });
 
@@ -368,36 +494,68 @@ function buildSiteHTML(cfg){
 '  .bh-pin-link{ font-size:13px; color:var(--clay-deep); text-decoration:none; border-bottom:1px solid rgba(156,111,68,0.4); }\n' +
 '  .bh-pin-link:hover{ border-bottom-color:var(--clay-deep); }\n' +
 '  .bh-divider{ height:1px; background:var(--line); margin:0 28px; }\n' +
+'  .bh-quicknav{ display:flex; gap:8px; flex-wrap:wrap; padding:22px 28px 0; }\n' +
+'  .bh-quicknav a{ font-size:12px; padding:5px 12px; border-radius:20px; border:1px solid var(--line); color:var(--ink-soft); text-decoration:none; background:rgba(255,255,255,0.35); }\n' +
+'  .bh-quicknav a:hover{ background:rgba(255,255,255,0.65); color:var(--ink); }\n' +
 '  .bh-note{ margin:36px 28px 8px; font-size:14px; color:var(--ink-soft); padding:16px 20px; background:var(--sand-deep); border-radius:2px; max-width:640px; }\n' +
 '  .bh-note b{ color:var(--ink); }\n' +
-'  .bh-category{ padding:0 28px; margin-top:44px; }\n' +
+'  .bh-empty{ margin:36px 28px 0; padding:16px 20px; font-size:14px; color:var(--ink-soft); border:1px dashed var(--line); border-radius:2px; }\n' +
+'  .bh-category{ padding:0 28px; margin-top:44px; scroll-margin-top:20px; }\n' +
 '  .bh-cat-head{ border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:6px; }\n' +
 '  .bh-cat-head h2{ font-family:\'Ubuntu\', sans-serif; font-weight:500; font-style:italic; font-size:21px; margin:0; }\n' +
-'  .bh-item{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding:15px 0; border-bottom:1px dashed var(--line); }\n' +
+'  .bh-item{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding:15px 0; border-bottom:1px dashed var(--line); flex-wrap:wrap; }\n' +
 '  .bh-item:last-child{ border-bottom:none; }\n' +
 '  .bh-item-text b{ display:block; font-size:15px; font-weight:600; }\n' +
 '  .bh-item-text span{ font-size:13px; color:var(--ink-soft); }\n' +
-'  .bh-offer-btn{ font-size:12.5px; padding:8px 14px; border-radius:20px; white-space:nowrap; font-weight:500; border:1px solid rgba(124,133,100,0.4); background:rgba(124,133,100,0.08); color:var(--sage-deep); cursor:pointer; font-family:\'Ubuntu\',sans-serif; }\n' +
+'  .bh-badge-new{ display:inline-block; font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#fff; background:var(--clay-deep); padding:2px 8px; border-radius:10px; margin-left:8px; vertical-align:middle; }\n' +
+'  .bh-offer-btn{ font-size:12.5px; padding:8px 14px; border-radius:20px; white-space:nowrap; font-weight:500; border:1px solid rgba(124,133,100,0.4); background:rgba(124,133,100,0.08); color:var(--sage-deep); cursor:pointer; font-family:\'Ubuntu\',sans-serif; margin-left:auto; }\n' +
 '  .bh-offer-btn:hover{ background:rgba(124,133,100,0.16); }\n' +
+'  .bh-offer-wrap{ display:flex; flex-direction:column; align-items:flex-end; gap:4px; margin-left:auto; }\n' +
+'  .bh-offer-btn.is-offered{ background:rgba(124,133,100,0.22); color:var(--sage-deep); cursor:default; }\n' +
+'  .bh-offer-btn.is-offered:hover{ background:rgba(124,133,100,0.22); }\n' +
+'  .bh-offer-again{ font-size:11px; color:var(--ink-soft); text-decoration:underline; background:none; border:none; cursor:pointer; padding:0; font-family:\'Ubuntu\',sans-serif; }\n' +
+'  .bh-backtotop{ display:block; text-align:center; font-size:12px; color:var(--ink-soft); text-decoration:none; margin-top:36px; }\n' +
+'  .bh-backtotop:hover{ color:var(--clay-deep); }\n' +
 '  .bh-suggest{ margin:56px 28px 0; padding:32px 30px; background:var(--ink); color:var(--sand); border-radius:2px; }\n' +
 '  .bh-suggest h2{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-style:italic; font-size:22px; margin:0 0 8px; }\n' +
 '  .bh-suggest p{ font-size:14px; color:#C9C4AC; margin:0 0 20px; max-width:48ch; }\n' +
+'  .bh-field-label{ display:block; font-size:12.5px; color:#C9C4AC; margin:0 0 6px; }\n' +
 '  .bh-wrap input, .bh-wrap textarea{ font-family:\'Ubuntu\', sans-serif; background:#3B372A; border:1px solid rgba(242,236,222,0.2); color:var(--sand); border-radius:3px; padding:11px 13px; font-size:14px; width:100%; margin-bottom:10px; }\n' +
+'  .bh-wrap input:invalid{ box-shadow:none; }\n' +
+'  .bh-error-text{ font-size:12px; color:#E39A7C; margin:-6px 0 10px; display:none; }\n' +
+'  .bh-error-text.show{ display:block; }\n' +
 '  .bh-btn-primary{ background:var(--clay); color:#241A0D; border:none; padding:11px 22px; border-radius:3px; font-weight:700; font-size:14px; cursor:pointer; font-family:\'Ubuntu\', sans-serif; }\n' +
 '  .bh-btn-primary:hover{ background:#CC9A6B; }\n' +
 '  .bh-footer{ padding:40px 28px 64px; font-size:12.5px; color:var(--ink-soft); }\n' +
 '  .bh-footer p{ max-width:52ch; margin:0; }\n' +
 '  .bh-modal-backdrop{ position:fixed; inset:0; background:rgba(46,43,34,0.5); display:none; align-items:center; justify-content:center; padding:20px; z-index:9999; }\n' +
 '  .bh-modal-backdrop.open{ display:flex; }\n' +
-'  .bh-modal{ background:var(--sand); border-radius:3px; padding:28px; max-width:380px; width:100%; }\n' +
-'  .bh-modal h3{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-style:italic; font-size:20px; margin:0 0 4px; color:var(--ink); }\n' +
+'  .bh-modal{ background:var(--sand); border-radius:3px; padding:28px; max-width:380px; width:100%; position:relative; }\n' +
+'  .bh-modal-close{ position:absolute; top:14px; right:14px; background:none; border:none; font-size:18px; line-height:1; color:var(--ink-soft); cursor:pointer; padding:4px; }\n' +
+'  .bh-modal-close:hover{ color:var(--ink); }\n' +
+'  .bh-modal h3{ font-family:\'Ubuntu\', sans-serif; font-weight:700; font-style:italic; font-size:20px; margin:0 24px 4px 0; color:var(--ink); }\n' +
 '  .bh-modal p.bh-sub{ font-size:13px; color:var(--ink-soft); margin:0 0 18px; }\n' +
+'  .bh-modal .bh-field-label{ color:var(--ink-soft); }\n' +
+'  .bh-modal .bh-error-text{ color:#9C4A2A; }\n' +
 '  .bh-modal input{ background:#fff; color:var(--ink); border:1px solid var(--line); }\n' +
+'  .bh-modal input.bh-invalid{ border-color:#9C4A2A; }\n' +
 '  .bh-modal-actions{ display:flex; gap:10px; margin-top:14px; }\n' +
 '  .bh-btn-ghost{ background:none; border:1px solid var(--line); color:var(--ink); padding:10px 16px; border-radius:3px; font-size:14px; cursor:pointer; flex:1; font-family:\'Ubuntu\', sans-serif; }\n' +
 '  .bh-modal .bh-btn-primary{ flex:1; }\n' +
+'  @media (max-width:520px){\n' +
+'    .bh-header{ padding:44px 20px 28px; }\n' +
+'    .bh-quicknav{ padding:18px 20px 0; }\n' +
+'    .bh-note{ margin:28px 20px 8px; }\n' +
+'    .bh-empty{ margin:28px 20px 0; }\n' +
+'    .bh-category{ padding:0 20px; }\n' +
+'    .bh-suggest{ margin:44px 20px 0; padding:24px 20px; }\n' +
+'    .bh-footer{ padding:32px 20px 48px; }\n' +
+'    .bh-offer-btn{ margin-left:0; }\n' +
+'    .bh-offer-wrap{ margin-left:0; align-items:flex-start; width:100%; }\n' +
+'    .bh-wrap input, .bh-wrap textarea{ font-size:16px; }\n' +
+'  }\n' +
 '</style>\n' +
-'<div class="bh-wrap">\n' +
+'<div class="bh-wrap" id="bh-top">\n' +
 '<div class="bh-header">\n' +
 '  <span class="bh-eyebrow">' + escapeHtml(cfg.eyebrow) + '</span>\n' +
 '  <h1 class="bh-serif">' + headingHTML + '</h1>\n' +
@@ -406,27 +564,37 @@ function buildSiteHTML(cfg){
 '  ' + styleBlockHTML + '\n' +
 '</div>\n' +
 '<div class="bh-divider"></div>\n' +
+'<nav class="bh-quicknav" id="bh-quicknav" aria-label="Snel naar een categorie"></nav>\n' +
 '<div class="bh-note"><b>Zo werkt het:</b> zie je iets dat je kunt missen? Klik op &ldquo;ik bied dit aan&rdquo; &mdash; er opent een kant-en-klaar bericht naar mij, dat jij zelf verstuurt. Is iets al geregeld, dan haal ik het van de lijst af.</div>\n' +
 '<div id="bh-categories"></div>\n' +
+'<a class="bh-backtotop" id="bh-backtotop" href="#bh-top" style="display:none;">↑ Terug naar boven</a>\n' +
 '<div class="bh-suggest">\n' +
 '  <h2 class="bh-serif">Staat er iets niet bij?</h2>\n' +
 '  <p>' + escapeHtml(cfg.suggestDesc) + '</p>\n' +
-'  <input id="bh-sugg-name" placeholder="Je naam">\n' +
-'  <input id="bh-sugg-what" placeholder="Wat heb je voor me?">\n' +
-'  <textarea id="bh-sugg-note" placeholder="Eventuele toelichting" style="min-height:56px;"></textarea>\n' +
-'  <button class="bh-btn-primary" id="bh-sugg-submit">Verstuur</button>\n' +
+'  <label class="bh-field-label" for="bh-sugg-name">Je naam</label>\n' +
+'  <input id="bh-sugg-name">\n' +
+'  <label class="bh-field-label" for="bh-sugg-what">Wat heb je voor me?</label>\n' +
+'  <input id="bh-sugg-what">\n' +
+'  <p class="bh-error-text" id="bh-sugg-error">Vul in elk geval je naam en wat je aanbiedt in.</p>\n' +
+'  <label class="bh-field-label" for="bh-sugg-note">Eventuele toelichting (optioneel)</label>\n' +
+'  <textarea id="bh-sugg-note" style="min-height:56px;"></textarea>\n' +
+'  <button class="bh-btn-primary" id="bh-sugg-submit" type="button">Verstuur</button>\n' +
 '</div>\n' +
 '<div class="bh-footer"><p>' + escapeHtml(cfg.footer) + '</p></div>\n' +
 '<div class="bh-modal-backdrop" id="bh-modal-backdrop">\n' +
-'  <div class="bh-modal">\n' +
+'  <div class="bh-modal" role="dialog" aria-modal="true" aria-labelledby="bh-modal-title">\n' +
+'    <button class="bh-modal-close" id="bh-modal-close" type="button" aria-label="Sluiten">×</button>\n' +
 '    <h3 class="bh-serif" id="bh-modal-title">Wat fijn!</h3>\n' +
 '    <p class="bh-sub">Laat weten wie je bent — er opent daarna een bericht dat jij zelf verstuurt.</p>\n' +
-'    <input id="bh-claim-name" placeholder="Je naam">\n' +
+'    <label class="bh-field-label" for="bh-claim-name">Je naam</label>\n' +
+'    <input id="bh-claim-name">\n' +
+'    <p class="bh-error-text" id="bh-claim-error">Vul in elk geval je naam in.</p>\n' +
 '    <div id="bh-claim-qty-wrap" style="display:none;">\n' +
-'      <label style="display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;">Hoeveel bied je aan?</label>\n' +
+'      <label class="bh-field-label" id="bh-claim-qty-label" for="bh-claim-qty">Hoeveel bied je aan?</label>\n' +
 '      <input id="bh-claim-qty" type="number" min="1" step="1" value="1" style="max-width:100px;">\n' +
 '    </div>\n' +
-'    <input id="bh-claim-note" placeholder="Eventuele toelichting (optioneel)">\n' +
+'    <label class="bh-field-label" for="bh-claim-note">Eventuele toelichting (optioneel)</label>\n' +
+'    <input id="bh-claim-note">\n' +
 '    <div class="bh-modal-actions">\n' +
 '      <button class="bh-btn-ghost" id="bh-modal-cancel" type="button">Annuleren</button>\n' +
 '      <button class="bh-btn-primary" id="bh-modal-confirm" type="button">Bericht openen</button>\n' +
@@ -436,45 +604,125 @@ function buildSiteHTML(cfg){
 '</div>\n' +
 '<script>\n' +
 '(function(){\n' +
+'// ============================================================================\n' +
+'// LATER ZELF EEN ITEM TOEVOEGEN AAN DEZE LIJST?\n' +
+'// Dat kan direct hier in de code, zonder de hele pagina opnieuw te maken.\n' +
+'// Zoek hieronder de categorie waar het bij hoort (bijvoorbeeld "Keuken") en\n' +
+'// voeg tussen de { }-blokjes van die categorie een nieuwe regel toe, naar\n' +
+'// het voorbeeld van de items die er al staan. Bijvoorbeeld:\n' +
+'//\n' +
+'//   { "name": "Koffiezetapparaat", "note": "graag met filters", "needed": 1, "isNew": true }\n' +
+'//\n' +
+'// - "name"   : de naam van het item (verplicht)\n' +
+'// - "note"   : een korte toelichting (mag leeg zijn: "")\n' +
+'// - "needed" : hoeveel stuks je nodig hebt (meestal 1)\n' +
+'// - "isNew"  : zet dit op true om er een "Nieuw"-label bij te tonen; zet\n' +
+'//              het weer op false zodra het label niet meer nodig is\n' +
+'// Vergeet geen komma tussen items, en bewaar het bestand daarna opnieuw.\n' +
+'// Wil je een hele nieuwe categorie? Kopieer een heel { "category": ..., "items": [...] }-blok.\n' +
+'// ============================================================================\n' +
 'var itemsData = ' + itemsJSON + ';\n' +
 'var contact = ' + contactBlock + ';\n' +
+'var STORAGE_KEY = "opnieuwthuis-aangeboden";\n' +
+'function loadOffered(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; } }\n' +
+'function saveOffered(map){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(map)); }catch(e){} }\n' +
+'var offered = loadOffered();\n' +
 'function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; }\n' +
 'function escapeHtml(str){ var d=document.createElement("div"); d.textContent=str; return d.innerHTML; }\n' +
+'function slugify(str){ return String(str).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"") || "categorie"; }\n' +
+'function renderQuicknav(){\n' +
+'  var nav=document.getElementById("bh-quicknav");\n' +
+'  if(itemsData.length < 2){ nav.style.display="none"; return; }\n' +
+'  itemsData.forEach(function(cat, idx){\n' +
+'    var a=el("a", null, escapeHtml(cat.category));\n' +
+'    a.href = "#bh-cat-" + idx + "-" + slugify(cat.category);\n' +
+'    nav.appendChild(a);\n' +
+'  });\n' +
+'}\n' +
 'function renderCategories(){\n' +
 '  var wrap=document.getElementById("bh-categories"); wrap.innerHTML="";\n' +
-'  itemsData.forEach(function(cat){\n' +
+'  if(itemsData.length === 0){\n' +
+'    wrap.appendChild(el("p","bh-empty","Er staan nog geen spullen op deze lijst."));\n' +
+'    return;\n' +
+'  }\n' +
+'  itemsData.forEach(function(cat, catIdx){\n' +
 '    var catEl=el("div","bh-category");\n' +
+'    catEl.id = "bh-cat-" + catIdx + "-" + slugify(cat.category);\n' +
 '    var head=el("div","bh-cat-head"); head.appendChild(el("h2",null,escapeHtml(cat.category))); catEl.appendChild(head);\n' +
-'    cat.items.forEach(function(item){\n' +
+'    cat.items.forEach(function(item, itemIdx){\n' +
 '      var needed = item.needed && item.needed>1 ? item.needed : 1;\n' +
+'      var itemKey = catIdx + "-" + itemIdx + "-" + item.name;\n' +
 '      var row=el("div","bh-item");\n' +
 '      var textWrap=el("div","bh-item-text");\n' +
 '      var label = needed>1 ? (item.name+" ("+needed+"x)") : item.name;\n' +
-'      textWrap.appendChild(el("b",null,escapeHtml(label)));\n' +
+'      var labelHTML = escapeHtml(label) + (item.isNew ? \' <span class="bh-badge-new">Nieuw</span>\' : "");\n' +
+'      textWrap.appendChild(el("b",null,labelHTML));\n' +
 '      if(item.note) textWrap.appendChild(el("span",null,escapeHtml(item.note)));\n' +
 '      row.appendChild(textWrap);\n' +
-'      var btn=el("button","bh-offer-btn","Ik bied dit aan →");\n' +
+'      var offerWrap=el("div","bh-offer-wrap");\n' +
+'      var btn=el("button","bh-offer-btn");\n' +
 '      btn.type="button";\n' +
-'      btn.addEventListener("click", function(){ openModal(item.name, needed); });\n' +
-'      row.appendChild(btn);\n' +
+'      function paintButton(){\n' +
+'        offerWrap.innerHTML="";\n' +
+'        if(offered[itemKey]){\n' +
+'          btn.textContent="Aangeboden ✓"; btn.classList.add("is-offered");\n' +
+'          offerWrap.appendChild(btn);\n' +
+'          var again=el("button","bh-offer-again","toch opnieuw aanbieden");\n' +
+'          again.type="button";\n' +
+'          again.addEventListener("click", function(){ openModal(item.name, needed, itemKey); });\n' +
+'          offerWrap.appendChild(again);\n' +
+'        } else {\n' +
+'          btn.textContent="Ik bied dit aan →"; btn.classList.remove("is-offered");\n' +
+'          offerWrap.appendChild(btn);\n' +
+'        }\n' +
+'      }\n' +
+'      btn.addEventListener("click", function(){ openModal(item.name, needed, itemKey); });\n' +
+'      paintButton();\n' +
+'      row.appendChild(offerWrap);\n' +
+'      row.dataset.itemKey = itemKey;\n' +
+'      row._repaint = paintButton;\n' +
 '      catEl.appendChild(row);\n' +
 '    });\n' +
 '    wrap.appendChild(catEl);\n' +
 '  });\n' +
 '}\n' +
-'var activeItemName=null, activeNeeded=1;\n' +
-'function openModal(name, needed){\n' +
-'  activeItemName=name; activeNeeded=needed;\n' +
+'function repaintItem(itemKey){\n' +
+'  var row = document.querySelector(\'[data-item-key="\'+CSS.escape(itemKey)+\'"]\');\n' +
+'  if(row && row._repaint) row._repaint();\n' +
+'}\n' +
+'var activeItemName=null, activeNeeded=1, activeItemKey=null, lastFocusedEl=null;\n' +
+'var modalBackdrop=document.getElementById("bh-modal-backdrop");\n' +
+'var modalEl=modalBackdrop.querySelector(".bh-modal");\n' +
+'function openModal(name, needed, itemKey){\n' +
+'  activeItemName=name; activeNeeded=needed; activeItemKey=itemKey;\n' +
+'  lastFocusedEl = document.activeElement;\n' +
 '  document.getElementById("bh-modal-title").textContent = name + " — top!";\n' +
-'  document.getElementById("bh-claim-name").value="";\n' +
+'  var nameInput=document.getElementById("bh-claim-name");\n' +
+'  nameInput.value=""; nameInput.classList.remove("bh-invalid");\n' +
+'  document.getElementById("bh-claim-error").classList.remove("show");\n' +
 '  document.getElementById("bh-claim-note").value="";\n' +
 '  var qtyWrap=document.getElementById("bh-claim-qty-wrap"); var qtyInput=document.getElementById("bh-claim-qty");\n' +
-'  if(needed>1){ qtyWrap.style.display="block"; qtyInput.max=needed; qtyInput.value=1; } else { qtyWrap.style.display="none"; qtyInput.value=1; }\n' +
-'  document.getElementById("bh-modal-backdrop").classList.add("open");\n' +
+'  if(needed>1){ qtyWrap.style.display="block"; qtyInput.max=needed; qtyInput.value=1; document.getElementById("bh-claim-qty-label").textContent = "Hoeveel bied je aan? (max "+needed+")"; } else { qtyWrap.style.display="none"; qtyInput.value=1; }\n' +
+'  modalBackdrop.classList.add("open");\n' +
+'  setTimeout(function(){ nameInput.focus(); }, 30);\n' +
 '}\n' +
-'function closeModal(){ document.getElementById("bh-modal-backdrop").classList.remove("open"); }\n' +
+'function closeModal(){\n' +
+'  modalBackdrop.classList.remove("open");\n' +
+'  if(lastFocusedEl && typeof lastFocusedEl.focus === "function") lastFocusedEl.focus();\n' +
+'}\n' +
 'document.getElementById("bh-modal-cancel").addEventListener("click", closeModal);\n' +
-'document.getElementById("bh-modal-backdrop").addEventListener("click", function(e){ if(e.target.id==="bh-modal-backdrop") closeModal(); });\n' +
+'document.getElementById("bh-modal-close").addEventListener("click", closeModal);\n' +
+'modalBackdrop.addEventListener("click", function(e){ if(e.target===modalBackdrop) closeModal(); });\n' +
+'document.addEventListener("keydown", function(e){\n' +
+'  if(e.key==="Escape" && modalBackdrop.classList.contains("open")) closeModal();\n' +
+'  if(e.key==="Tab" && modalBackdrop.classList.contains("open")){\n' +
+'    var focusable=modalEl.querySelectorAll("button, input, textarea, [href]");\n' +
+'    if(!focusable.length) return;\n' +
+'    var first=focusable[0], last=focusable[focusable.length-1];\n' +
+'    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }\n' +
+'    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }\n' +
+'  }\n' +
+'});\n' +
 'function openContact(message){\n' +
 '  if(contact.method==="whatsapp" && contact.value){\n' +
 '    window.open("https://wa.me/"+contact.value+"?text="+encodeURIComponent(message), "_blank");\n' +
@@ -493,23 +741,47 @@ function buildSiteHTML(cfg){
 '  }\n' +
 '}\n' +
 'document.getElementById("bh-modal-confirm").addEventListener("click", function(){\n' +
-'  var name=document.getElementById("bh-claim-name").value.trim();\n' +
+'  var nameInput=document.getElementById("bh-claim-name");\n' +
+'  var name=nameInput.value.trim();\n' +
 '  var note=document.getElementById("bh-claim-note").value.trim();\n' +
 '  var qty=parseInt(document.getElementById("bh-claim-qty").value,10)||1;\n' +
 '  if(qty>activeNeeded) qty=activeNeeded; if(qty<1) qty=1;\n' +
-'  if(!name){ alert("Vul in elk geval je naam in."); return; }\n' +
+'  if(!name){\n' +
+'    nameInput.classList.add("bh-invalid");\n' +
+'    document.getElementById("bh-claim-error").classList.add("show");\n' +
+'    nameInput.focus();\n' +
+'    return;\n' +
+'  }\n' +
 '  var msg = "Hoi! Ik bied " + (activeNeeded>1 ? qty+"x " : "") + activeItemName + " aan.\\nGroet, " + name + (note ? ("\\n\\n"+note) : "");\n' +
 '  openContact(msg);\n' +
+'  if(activeItemKey){ offered[activeItemKey]=true; saveOffered(offered); repaintItem(activeItemKey); }\n' +
 '  closeModal();\n' +
 '});\n' +
 'document.getElementById("bh-sugg-submit").addEventListener("click", function(){\n' +
-'  var name=document.getElementById("bh-sugg-name").value.trim();\n' +
-'  var what=document.getElementById("bh-sugg-what").value.trim();\n' +
+'  var nameInput=document.getElementById("bh-sugg-name");\n' +
+'  var whatInput=document.getElementById("bh-sugg-what");\n' +
+'  var name=nameInput.value.trim();\n' +
+'  var what=whatInput.value.trim();\n' +
 '  var note=document.getElementById("bh-sugg-note").value.trim();\n' +
-'  if(!name || !what){ alert("Vul je naam en wat je aanbiedt in."); return; }\n' +
+'  var errorEl=document.getElementById("bh-sugg-error");\n' +
+'  if(!name || !what){\n' +
+'    nameInput.classList.toggle("bh-invalid", !name);\n' +
+'    whatInput.classList.toggle("bh-invalid", !what);\n' +
+'    errorEl.classList.add("show");\n' +
+'    (name ? whatInput : nameInput).focus();\n' +
+'    return;\n' +
+'  }\n' +
+'  nameInput.classList.remove("bh-invalid"); whatInput.classList.remove("bh-invalid"); errorEl.classList.remove("show");\n' +
 '  var msg = "Hoi! Ik heb iets voor je: " + what + "\\nGroet, " + name + (note ? ("\\n\\n"+note) : "");\n' +
 '  openContact(msg);\n' +
 '});\n' +
+'var backToTop=document.getElementById("bh-backtotop");\n' +
+'if(itemsData.length > 1){\n' +
+'  window.addEventListener("scroll", function(){\n' +
+'    backToTop.style.display = window.scrollY > 500 ? "block" : "none";\n' +
+'  });\n' +
+'}\n' +
+'renderQuicknav();\n' +
 'renderCategories();\n' +
 '})();\n' +
 '<\/script>\n' +
@@ -548,6 +820,38 @@ document.getElementById('f-download').addEventListener('click', () => {
   a.href = url; a.download = 'oproeppagina.html';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+
+  const btn = document.getElementById('f-download');
+  const old = btn.textContent; btn.textContent = 'Gedownload!';
+  setTimeout(() => { btn.textContent = old; }, 1800);
+});
+
+// Mobiele weergave: wissel tussen formulier en voorbeeld
+const tabForm = document.getElementById('tab-form');
+const tabPreview = document.getElementById('tab-preview');
+const formCol = document.getElementById('form-col');
+const previewCol = document.getElementById('preview-col');
+function setMobileTab(which){
+  const showForm = which === 'form';
+  formCol.classList.toggle('tab-hidden', !showForm);
+  previewCol.classList.toggle('tab-hidden', showForm);
+  tabForm.classList.toggle('active', showForm);
+  tabPreview.classList.toggle('active', !showForm);
+}
+tabForm.addEventListener('click', () => setMobileTab('form'));
+tabPreview.addEventListener('click', () => setMobileTab('preview'));
+
+// Voorbeeld bekijken als breed scherm of telefoon
+const deviceDesktopBtn = document.getElementById('device-desktop');
+const deviceMobileBtn = document.getElementById('device-mobile');
+const previewFrameWrap = document.getElementById('preview-frame-wrap');
+deviceDesktopBtn.addEventListener('click', () => {
+  previewFrameWrap.classList.remove('mobile');
+  deviceDesktopBtn.classList.add('active'); deviceMobileBtn.classList.remove('active');
+});
+deviceMobileBtn.addEventListener('click', () => {
+  previewFrameWrap.classList.add('mobile');
+  deviceMobileBtn.classList.add('active'); deviceDesktopBtn.classList.remove('active');
 });
 
 document.getElementById('f-copy').addEventListener('click', async () => {
